@@ -1,0 +1,123 @@
+# Project source: https://github.com/josepsuy/LPR-GNN (currently private).
+# Parameter reference: meaning and actual consumers in this project.
+# Paths are relative to the project root unless explicitly absolute.
+# Metadata-only fields do not switch the implemented algorithms.
+
+# Base RNG seed for Python, NumPy and PyTorch; training order uses seed + epoch. Used by src/trainer.py: set_seed() and make_loader().
+seed: 42
+# Compute device: auto selects CUDA when available, otherwise CPU; cpu/cuda request a device explicitly. Used by src/trainer.py: resolve_device(), train(), and makespan_predictor.ipynb.
+device: auto
+# Output directory relative to the project root for checkpoints, history, evaluations and predictions. Used by src/trainer.py: train(), src/instance_evaluation.py, and training.ipynb / makespan_predictor.ipynb.
+output_dir: ./outputs/run
+# Original RCPSP instance partitions for deterministic validation and final test rollouts.
+instance_evaluation:
+  # JSON split manifest with instance paths and integrity information. Used by src/instance_evaluation.py: load_instance_splits(), training.ipynb and create_graphs_training.ipynb.
+  manifest: ./instance_splits.json
+  # Descriptive metadata only: minimum mean validation makespan selects best.pt. src/trainer.py: train() implements this criterion directly; changing this field does not switch the metric.
+  criterion: validation_mean_makespan
+# Graph feature normalization; only the explicitly identified settings below are configurable in the current implementation.
+normalization:
+  # Descriptive metadata: log1p(x) / log1p(temporal_reference). Implemented directly by src/normalization.py: _temporal_log_scale(); this field is not read as a method selector.
+  temporal_method: log1p_fixed_reference_no_clip
+  # Fixed time reference for duration and temporal-distance scaling; not a scheduling horizon. Used by GraphNormalizer in src/normalization.py, src/instance_evaluation.py and the graph-generation / predictor notebooks.
+  temporal_reference: 100.0
+  # Descriptive metadata: temporal values are not clipped, so values above the reference may exceed 1. src/normalization.py implements this directly and does not read this flag.
+  temporal_clip: false
+  # Resources are divided by the corresponding instance capacities. Checked by create_graphs_training.ipynb; implemented by src/normalization.py: normalize_graph(). Other method names are not supported.
+  resource_method: instance_capacity_ratio
+  # Documented resource-ratio bounds [lower, upper]. src/normalization.py clips resource ratios to [0, 1] by default; this list is metadata, not a configurable clipping range.
+  resource_output_range:
+  - 0.0
+  - 1.0
+  # Descriptive metadata: inverse temporal distances are normalized per destination Border node. Implemented directly in src/normalization.py; this field is not a method selector.
+  proximity_method: inverse_delta_normalized_per_border
+# Streaming supervised graph dataset and CPU loader settings; validation/test rollouts use the instance manifest instead.
+data:
+  # Directory containing supervised training graph files. Used by src/trainer.py: make_loader() and src/instance_evaluation.py: load_instance_splits() to check training membership.
+  train_dir: ./data/train
+  # Graph directory for optional validation diagnostic loaders in src/trainer.py: make_loader(). Main training validation uses manifest RCPSP instances, not this directory.
+  validation_dir: ./data/validation
+  # Graph directory for optional test diagnostic loaders in src/trainer.py: make_loader(). Final makespan test uses manifest RCPSP instances, not this directory.
+  test_dir: ./data/test
+  # CPU DataLoader worker processes; 0 loads graphs in the main process. Used by src/trainer.py: make_loader(); also sets graph-generation workers in create_graphs_training.ipynb.
+  num_workers: 12
+  # Number of batches prefetched per loader worker; effective only when num_workers > 0. Used by src/trainer.py: make_loader(). Larger values increase CPU memory requirements.
+  prefetch_factor: 12
+  # Request pinned CPU memory for graph batches when CUDA is available. Used by src/trainer.py: make_loader() to support non-blocking transfers.
+  pin_memory: true
+  # Enable training file-order shuffling using the epoch-dependent seed. Used by src/trainer.py: make_loader() and src/data.py: RcpspGraphDataset. This flag does not disable shuffle_buffer.
+  shuffle: true
+  # Number of parsed graphs buffered for training-order shuffling per worker; 0 or 1 disables buffer shuffling. Used by src/data.py: _buffer_shuffle(), configured by src/trainer.py: make_loader().
+  shuffle_buffer: 2048
+  # Supervised graph augmentation filtering; does not augment the original RCPSP validation/test rollouts.
+  variants:
+    # all uses every stored variant; original keeps only unaugmented graphs. Used by src/trainer.py: make_loader() and src/data.py: RcpspGraphDataset.
+    train: all
+    # Fallback group size for original-variant filtering when augmentation metadata is absent: original is the first graph in each group. Used by src/data.py: _is_original_variant(), via make_loader().
+    legacy_group_size: 3
+# Architecture arguments passed by src/trainer.py: build_model() to src/model.py: RcpspGNN.
+model:
+  # Width of node hidden states, encoders and GRU updates. Used by src/model.py: RcpspGNN.__init__(), via build_model().
+  state_dim: 32
+  # Number of full message-passing iterations with shared weights. Used by src/model.py: RcpspGNN.forward(); increasing this changes computation, not the shared parameter count.
+  num_iterations: 16
+  # Hidden width of the activity-scoring readout MLP combining Border, Other and Time-Resources contexts. Used by src/model.py: RcpspGNN.__init__().
+  readout_hidden: 32
+  # Dropout probability in the scoring readout during training; disabled in evaluation mode. Used by src/model.py: RcpspGNN.__init__().
+  readout_dropout: 0.15
+# Supervised graph loss weights and node-classification reporting threshold.
+loss:
+  # Multiplier of graph-balanced binary cross-entropy in total loss. Used by src/losses.py: multilabel_top1_loss(), through src/trainer.py: _loss_kwargs().
+  bce_weight: 0.5
+  # Multiplier of -log(sum of softmax probability over positive Border targets). Used by src/losses.py: multilabel_top1_loss(), through _loss_kwargs().
+  top1_weight: 6.0
+  # Positive-class weight inside binary cross-entropy, not an additional Top-1 weight. Used by src/losses.py: multilabel_top1_loss().
+  pos_weight: 10.0
+  # Logit threshold for binary node metrics only; does not change loss, Top-1 ranking or rollout selection. Used by MetricAccumulator and FullSelectionDiagnostics through src/trainer.py.
+  threshold_logit: 2.0
+# Adam optimization and graph-count-based learning-rate decay.
+optimizer:
+  # Descriptive metadata only: src/trainer.py: train() constructs torch.optim.Adam directly and does not use this field to select an optimizer.
+  type: Adam
+  # Initial Adam learning rate before graph-count decay. Used by src/trainer.py: train() and set_exponential_lr().
+  initial_learning_rate: 0.0003
+  # Graph-count scale in lr = initial_learning_rate * decay_rate ** (graphs_seen / decay_steps_graphs). Used by src/trainer.py: set_exponential_lr(); decay is continuous, not a discrete step.
+  decay_steps_graphs: 300000
+  # Learning-rate multiplier for each decay_steps_graphs processed graphs. Used by src/trainer.py: set_exponential_lr().
+  decay_rate: 0.8
+  # Adam weight-decay coefficient. Used by src/trainer.py: train() when constructing torch.optim.Adam.
+  weight_decay: 0.0001
+# Training loop controls; best checkpoint selection uses deterministic instance-level validation rollouts.
+training:
+  # Refresh training_evolution.png after completed epochs without extra inference. Used by src/trainer.py: train() and src/training_plots.py: plot_training_history().
+  plot_history: true
+  # Number of graphs in a PyG training/diagnostic batch, not rollout instances. Used by src/trainer.py: make_loader() and train().
+  batch_size: 256
+  # Total target epoch count, including completed epochs when resuming; not extra epochs. Used by src/trainer.py: train().
+  epochs: 24
+  # 0 (or negative) consumes all selected graphs once per epoch. Positive values request ceil(value / batch_size) batches from a repeating stream, so the graph count can exceed the requested budget. Used by src/trainer.py: train().
+  graphs_per_epoch: 0
+  # Run original-instance validation rollouts every N epochs; mean validation makespan selects best.pt. Used by src/trainer.py: train(); final validation/test are also evaluated after training.
+  validation_frequency: 1
+  # Number of minibatches accumulated before an optimizer update; minimum effective value is 1. Used by src/trainer.py: train().
+  gradient_accumulation_steps: 1
+  # Enable automatic mixed precision and gradient scaling on CUDA only. Used by src/trainer.py: train(); ignored on CPU.
+  amp: true
+  # Maximum gradient norm for clipping before optimizer steps; non-positive values disable clipping. Used by src/trainer.py: train().
+  max_grad_norm: 5.0
+  # Batch interval for progress-display updates and metric synchronization; does not reduce metric collection or validation frequency. Used by src/trainer.py: train().
+  progress_log_interval: 100
+  # Request torch.compile for the model when supported by the installed PyTorch. Used by src/trainer.py: train(); false uses eager execution.
+  compile: false
+  # Checkpoint FILE to resume model, optimizer, graph count and epoch; null starts fresh. Used by src/trainer.py: train(); requires matching split hash and makespan-selection metadata. A function resume argument takes precedence.
+  resume_checkpoint: null
+  # Currently unused by src/trainer.py: train(); changing this flag does not clear history.csv. The current loop appends history records to the output directory.
+  reset_history: True
+# Batched original-instance rollout settings shared by validation/test and the directory predictor, except save_every which is predictor-only.
+inference:
+  # Maximum independent RCPSP instances advanced together, sharing one model forward pass per decision step. Used by src/instance_evaluation.py: evaluate_instances() and makespan_predictor.ipynb.
+  rollout_batch_size: 6
+  # CPU thread count for rollout graph preparation; not DataLoader processes or GPU model replicas. Used by src/rcpsp_schedule.py: calculate_makespans_batched(), via evaluate_instances() and makespan_predictor.ipynb.
+  graph_workers: 12
+  # Save the predictor Excel after this many new result rows; 0 disables intermediate saves (final save still occurs). Used only by makespan_predictor.ipynb, not training validation/test.
+  save_every: 48

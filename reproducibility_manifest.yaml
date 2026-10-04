@@ -1,0 +1,60 @@
+distribution: source_only
+source_repository:
+  url: https://github.com/josepsuy/LPR-GNN
+  visibility: private
+  access: owner_granted
+  contents: source_configuration_minimal_notebooks_split_metadata_and_reference_schedules
+  excludes: raw_instances_generated_graphs_results_and_pretrained_checkpoints
+status: no_results_or_pretrained_checkpoint_bundled
+environment:
+  python: '3.11.15'
+  python_version_file: .python-version
+  dependencies: requirements.txt
+  dependency_scope: pinned_direct_dependencies_not_a_transitive_lockfile
+  torch: 2.5.1+cu121
+configuration_file: config.yaml
+split_manifest: instance_splits.json
+dataset_guide: DATASETS.md
+datasets:
+  bundled_raw_instances: false
+  supported_families: [j30, j60, j90, j120, PACK, RG30, RG300]
+  psplib: https://www.om-db.wi.tum.de/psplib/
+  rg_library: https://github.com/MarioVanhoucke/RCPLIB-Resource-Constrained-Project-Library/releases/latest
+  pack_source_status: historical_LAAS_source_no_verified_current_direct_download
+architecture:
+  type: shared_GRU
+  iterations: 16
+  parameters: 41514
+  temporal_scales: [1, 8, 64, 512]
+  temporal_edges: bidirectional
+normalization:
+  temporal: log1p_fixed_reference_no_clip
+  temporal_reference: 100.0
+  resources: instance_capacity_ratio
+training:
+  epochs: 24
+  graphs_per_epoch: 0
+  variants: all
+  shuffle: seed_plus_epoch
+  skip_singleton_border_graphs: true
+evaluation:
+  data: original_RCPSP_instances
+  method: deterministic_SSGS_rollouts
+  checkpoint_selection: minimum_validation_mean_makespan
+  test: after_training_with_validation_selected_checkpoint
+  singleton_border: bypass_graph_construction_and_GNN
+paths:
+  training_inputs: source_data
+  raw_benchmarks: rcpsp
+  training_graphs: data/train
+  validation_instances: data/validation
+  test_instances: data/test
+  generated_outputs: outputs/run
+notebooks:
+  - create_graphs_training.ipynb
+  - training.ipynb
+  - makespan_predictor.ipynb
+project_distribution:
+  paths: relative_to_repository_root
+  results: excluded
+  third_party_data_rights: obtain_separately_and_follow_provider_terms

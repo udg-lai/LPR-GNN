@@ -1,0 +1,96 @@
+from __future__ import annotations
+
+import re
+from pathlib import Path
+from typing import Dict
+
+
+def normalize_instance_name(value: str | Path) -> str:
+    name = Path(str(value).replace("\\", "/")).name.lower().strip()
+    if name.endswith(".pat.data"):
+        name = name[: -len(".pat.data")]
+    for extension in (".rcp", ".sm", ".txt", ".data", ".pat"):
+        if name.endswith(extension):
+            name = name[: -len(extension)]
+    return name.replace("-", "_")
+
+
+def infer_problem_size(path: str | Path) -> int | None:
+    match = re.search(r"j(\d+)", Path(path).name.lower())
+    return int(match.group(1)) if match else None
+
+
+def _instance_keys(problem_size: int, group: int, instance: int) -> list[str]:
+    return [
+        f"j{problem_size}{group}_{instance}",
+        f"j{problem_size}_{group}_{instance}",
+    ]
+
+
+def _pack_keys(number: int) -> list[str]:
+    return [f"pack{number:03d}", f"pack{number}"]
+
+
+def load_bounds_file(path: str | Path, problem_size: int | None = None) -> Dict[str, int]:
+    path = Path(path)
+    problem_size = infer_problem_size(path) if problem_size is None else problem_size
+    bounds: Dict[str, int] = {}
+
+    with path.open("r", encoding="utf-8", errors="ignore") as stream:
+        for raw_line in stream:
+            line = raw_line.strip()
+            if not line or line.startswith("#"):
+                continue
+
+            if "-" in line and ":" in line:
+                instance_name, sequence = line.split("-", 1)
+                last_value = None
+                for pair in sequence.split(";"):
+                    if ":" not in pair:
+                        continue
+                    _, value = pair.split(":", 1)
+                    if value.strip():
+                        last_value = int(float(value))
+                if last_value is not None:
+                    key = normalize_instance_name(instance_name)
+                    bounds[key] = last_value
+                    match = re.fullmatch(r"pack0*(\d+)", key)
+                    if match:
+                        for alias in _pack_keys(int(match.group(1))):
+                            bounds[alias] = last_value
+                    continue
+
+            parts = (
+                line.replace(";", " ")
+                .replace(",", " ")
+                .replace("\t", " ")
+                .split()
+            )
+            if len(parts) < 3:
+                continue
+            try:
+                group = int(parts[0])
+                instance = int(parts[1])
+                makespan = int(float(parts[2]))
+            except ValueError:
+                continue
+
+            if problem_size is not None:
+                for key in _instance_keys(problem_size, group, instance):
+                    bounds[key] = makespan
+            for key in _pack_keys(instance):
+                bounds[key] = makespan
+
+    return bounds
+
+
+def get_bound(filename: str | Path, bounds: Dict[str, int], default: int = -1) -> int:
+    key = normalize_instance_name(filename)
+    if key in bounds:
+        return bounds[key]
+    match = re.fullmatch(r"pack0*(\d+)", key)
+    if match:
+        for alias in _pack_keys(int(match.group(1))):
+            if alias in bounds:
+                return bounds[alias]
+    return default

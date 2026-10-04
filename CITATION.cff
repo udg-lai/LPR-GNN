@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: >-
+  If you use LPR-GNN in scientific work, please cite the associated manuscript
+  using the preferred citation below. This is a scholarly citation request,
+  not an additional condition of the MIT License.
+type: software
+title: LPR-GNN
+repository-code: https://github.com/josepsuy/LPR-GNN
+authors:
+  - family-names: Suy
+    given-names: Josep
+  - family-names: Villaret
+    given-names: Mateu
+license: MIT
+preferred-citation:
+  type: unpublished
+  title: >-
+    Learning a State-Dependent Priority Rule for Serial Schedule Generation
+    with Graph Neural Networks
+  authors:
+    - family-names: Suy
+      given-names: Josep
+    - family-names: Villaret
+      given-names: Mateu
+  notes: Manuscript; publication metadata will be updated when available.
