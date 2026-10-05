@@ -29,7 +29,7 @@ def canonical_rcp(blob):
     if len(tokens) < 2:
         raise ValueError('Invalid Patterson header')
     activities, resources = tokens[:2]
-    if activities < 2 or resources < 1:
+    if activities < 2 or resources < 0:
         raise ValueError('Invalid Patterson dimensions')
     rows = [[activities, resources], tokens[2:2 + resources]]
     offset = 2 + resources
