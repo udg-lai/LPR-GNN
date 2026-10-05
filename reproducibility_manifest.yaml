@@ -1,11 +1,11 @@
-distribution: source_only
+distribution: source_and_selected_results
 source_repository:
   url: https://github.com/josepsuy/LPR-GNN
   visibility: private
   access: owner_granted
-  contents: source_configuration_minimal_notebooks_split_metadata_and_reference_schedules
-  excludes: raw_instances_generated_graphs_results_and_pretrained_checkpoints
-status: no_results_or_pretrained_checkpoint_bundled
+  contents: source_configuration_minimal_notebooks_split_metadata_reference_schedules_and_selected_results
+  excludes: raw_instances_generated_graphs_and_unselected_runtime_outputs
+status: selected_results_and_inference_weights_bundled
 environment:
   python: '3.11.15'
   python_version_file: .python-version
@@ -56,5 +56,10 @@ notebooks:
   - makespan_predictor.ipynb
 project_distribution:
   paths: relative_to_repository_root
-  results: excluded
+  results: paper_results
+  result_methods: [LPR-GNN, handcrafted_priority_rules, Wheatley]
+  other_priority_rule_results: paper_results/other_priority_rules_results.csv
+  inference_weights: paper_results/best.pt
+  inference_weights_model: LPR-GNN_base
+  result_provenance: paper_results/manifest.json
   third_party_data_rights: obtain_separately_and_follow_provider_terms

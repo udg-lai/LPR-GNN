@@ -1,0 +1,133 @@
+{
+  "included_methods": ["LPR-GNN base", "handcrafted priority rules", "Wheatley"],
+  "inference_weights_model": "LPR-GNN base",
+  "model": "LPR-GNN base",
+  "architecture": "shared GRU",
+  "iterations": 16,
+  "parameters": 41514,
+  "selected_epoch": 15,
+  "validation_mean_makespan": 78.8360655737705,
+  "selection_metric": "validation_mean_makespan",
+  "source_split_manifest_sha256": "c75518e34dd48115d0e23fd19cc472c65ab5119caaf01f1517316c330bd045a3",
+  "included_families": [
+    "J30",
+    "J60",
+    "J90",
+    "J120",
+    "PACK",
+    "RG30",
+    "RG300"
+  ],
+  "row_counts": {
+    "lpr_gnn_results.csv": {
+      "J120": 600,
+      "J30": 480,
+      "J60": 480,
+      "J90": 480,
+      "PACK": 55,
+      "RG300": 480,
+      "RG30": 1800
+    },
+    "other_priority_rules_results.csv": {
+      "RG300": 15360,
+      "RG30": 66550,
+      "J120": 22200,
+      "J30": 15360,
+      "J60": 15360,
+      "J90": 15360,
+      "PACK": 2035
+    }
+  },
+  "files": {
+    "lpr_gnn_results.csv": {
+      "source_filename": "makespan_results.xlsx",
+      "source_sha256": "27bfbd481657974881e1216e50cc9e617abbebd94a340c0d57c58970a7815a7d",
+      "source_sheet": "resultats",
+      "sha256": "cf8324a31d241fdc6f615320ddff2f6995c572703f81eff878c91cf830499ee3",
+      "bytes": 222927
+    },
+    "best.pt": {
+      "source_filename": "best.pt",
+      "source_sha256": "2d62eadd7104c88e28edb1202e6a1bea4c0ba782203f07730c03fbd89a830f6d",
+      "transformation": "model_state_only; tensors preserved exactly",
+      "sha256": "2433b3a900aa21d00c67a8739b28bd52bfc653ef4da3779340ebce58df398fbf",
+      "bytes": 188870
+    },
+    "other_priority_rules_results.csv": {
+      "manual_source": {
+        "source_filename": "Dades_makespan_manuals_definitives.xlsx",
+        "source_sha256": "83a3d8b0931c3aff974439bc323bc25a38b6528496bdb76910d99285641250eb",
+        "source_sheet": "runs"
+      },
+      "manual_export_sha256_before_merge": "f19d4882810d29a3227b0563be3053a74589d4938f5fd47fbf455baa8b0fff02",
+      "wheatley_sources": [
+        {
+          "family": "J120",
+          "filename": "j120_results.jsonl",
+          "sha256": "59b0af28f0b219947b239477bc18d89dae10a942495001d6f01c05d65eb76101",
+          "records": 600
+        },
+        {
+          "family": "J30",
+          "filename": "j30_results.jsonl",
+          "sha256": "c3a13b1f5750abdb1fe1c90cb14335a201b70885b7a50ca12214903ffa1dd9bd",
+          "records": 480
+        },
+        {
+          "family": "J60",
+          "filename": "j60_results.jsonl",
+          "sha256": "dfbb059d2bf3d90a4d3eea89c33f5b90b2e3dba13e0710ff025d92194412f6e7",
+          "records": 480
+        },
+        {
+          "family": "J90",
+          "filename": "j90_results.jsonl",
+          "sha256": "c9fccc4770a2b82a839faee111f1371ffbb047f554891d48ebfd6fd4aec71376",
+          "records": 480
+        },
+        {
+          "family": "PACK",
+          "filename": "pac_results.jsonl",
+          "sha256": "5ca2aa18c36c9623c1d272c1876d30b19cbdade4179dce8d109e184cbad5eb67",
+          "records": 55
+        },
+        {
+          "family": "RG30",
+          "filename": "rg30_results.jsonl",
+          "sha256": "7e4fe76687e42ee6beafc176e0be48c14db8317752ec16148cd279063014437b",
+          "records": 1800
+        },
+        {
+          "family": "RG300",
+          "filename": "rg300_results.jsonl",
+          "sha256": "1bcc1ca9514470eecf615e5f63ea5711e6dd8349f6ea2b759b5766d662fde6ab",
+          "records": 480
+        }
+      ],
+      "wheatley_checkpoint_cycle": 45,
+      "wheatley_device": "cpu",
+      "records_by_method": {
+        "handcrafted": {
+          "RG300": 14880,
+          "RG30": 64750,
+          "J120": 21600,
+          "J30": 14880,
+          "J60": 14880,
+          "J90": 14880,
+          "PACK": 1980
+        },
+        "wheatley": {
+          "J120": 600,
+          "J30": 480,
+          "J60": 480,
+          "J90": 480,
+          "PACK": 55,
+          "RG30": 1800,
+          "RG300": 480
+        }
+      },
+      "sha256": "5fe2e524bcf2d9e72618958d3950d5ad4d1ec3803ae5199228afea05547fa9c4",
+      "bytes": 29761315
+    }
+  }
+}

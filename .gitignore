@@ -20,3 +20,6 @@ data/train/*
 *.tar.gz
 *.[rR][cC][pP]
 *.[sS][mM]
+
+# Validation-selected inference weights supplied with the result archive.
+!paper_results/best.pt

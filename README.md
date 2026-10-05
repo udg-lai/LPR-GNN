@@ -24,7 +24,13 @@ The following files and directories are excluded by `.gitignore`:
 - Environment files that may contain credentials: `.env`, `.env.*`.
 - Local editor settings: `.vscode/`, `.idea/`.
 
-No pretrained checkpoints or saved notebook execution outputs are bundled.
+The `paper_results/` archive contains LPR-GNN base-model results, handcrafted
+priority-rule results and Wheatley rollouts in `other_priority_rules_results.csv`,
+plus validation-selected LPR-GNN inference weights. See
+[paper_results/README.md](paper_results/README.md) for methods and timing definitions.
+The checkpoint exclusion above
+has a narrow exception for `paper_results/best.pt`. Saved notebook execution
+outputs are not bundled.
 
 ## Installation
 
@@ -78,8 +84,9 @@ Start Jupyter from the repository root and run these notebooks in order:
 3. `makespan_predictor.ipynb`: evaluate a trained checkpoint on a directory of
    RCPSP instances (recursive by default), and generate an Excel workbook.
 
-The third notebook needs the `best.pt` produced by the second: no pretrained
-checkpoint is shipped. Reference bounds are optional and are not bundled; by default
+The third notebook can use the `best.pt` produced by the second or the supplied
+`paper_results/best.pt`, following [paper_results/README.md](paper_results/README.md).
+Reference bounds are optional and are not bundled; by default
 the predictor reports makespans and times without gaps. To compute gaps, supply a
 compatible reference file and set its relative path in `BOUNDS_PATH`.
 
@@ -106,8 +113,9 @@ duration scaling. The generation seed follows the YAML seed.
 - `outputs/`: created only when running the code; excluded from Git.
 
 See [DATASETS.md](DATASETS.md) for download sources and placement instructions.
-The project distribution excludes raw instances, results, checkpoints, generated graphs, saved
-notebook outputs, credentials, and machine-specific configuration.
+The project distribution excludes raw instances, generated graphs, saved notebook
+outputs, credentials, machine-specific configuration and runtime outputs outside
+the explicitly included `paper_results/` archive.
 
 ## Graph schema
 

@@ -38,7 +38,8 @@ under `rcpsp/`, since the recursive scan can evaluate them as well.
 
 The parser chooses its format by suffix. Keep native PSPLIB files as `.sm`.
 Renaming a `.sm` file to `.RCP` does **not** convert it to Patterson format.
-No pretrained model is bundled: train first to produce the configured `best.pt`.
+Use the supplied `paper_results/best.pt` for inference as described in
+`paper_results/README.md`, or train to produce the configured `best.pt`.
 Reference bounds are optional; configure `BOUNDS_PATH` in the predictor to obtain gaps.
 
 ## Training, validation and test
