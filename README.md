@@ -88,6 +88,10 @@ training reference schedules, and places the three fixed partitions. No local
 copies from an earlier project are required. The source recipe is
 `instance_sources.json`; prepared-file hashes are in `instance_splits.json`.
 
+For benchmark inference, `python prepare_benchmarks.py` separately prepares
+J30, J60, J90, J120, RG30, RG300 and PACK under `rcpsp/`, using
+`benchmark_sources.json`. This does not change the training partitions.
+
 Start Jupyter from the repository root and run these notebooks in order:
 
 1. `create_graphs_training.ipynb`: generate training graphs from raw instances and

@@ -12,7 +12,7 @@ All paths below are relative to the cloned repository root.
 | J60 | [PSPLIB](https://www.om-db.wi.tum.de/psplib/), single-mode J60 | `rcpsp/j60/` |
 | J90 | [PSPLIB](https://www.om-db.wi.tum.de/psplib/), single-mode J90 | `rcpsp/j90/` |
 | J120 | [PSPLIB](https://www.om-db.wi.tum.de/psplib/), single-mode J120 | `rcpsp/j120/` |
-| PACK | Carlier and Neron's PACK suite; historical [LAAS collection](http://www.laas.fr/~okone/) (see availability note below) | `rcpsp/PACK/` |
+| PACK | Carlier and Neron's PACK suite; public [MiniZinc benchmark mirror](https://github.com/MiniZinc/minizinc-benchmarks/tree/master/rcpsp/data_pack) | `rcpsp/PACK/` |
 | RG30 | [RCPLIB releases](https://github.com/MarioVanhoucke/RCPLIB-Resource-Constrained-Project-Library/releases/latest), original RG30 | `rcpsp/RG30/` |
 | RG300 | [RCPLIB releases](https://github.com/MarioVanhoucke/RCPLIB-Resource-Constrained-Project-Library/releases/latest), original RG300 | `rcpsp/RG300/` |
 
@@ -23,13 +23,23 @@ the [OR&S dataset page](https://www.projectmanagement.ugent.be/research/project_
 provides background and points to RCPLIB. Extract archives first, then copy the
 instance files into the family directories above.
 
-PACK availability: the historical LAAS address is cited in the benchmark
-literature, but a working current direct download was not verified when preparing
-this distribution. Obtain the original PACK suite from its authors or an existing
-author-provided copy; do not substitute a different dataset. This entry is a
-provenance pointer, not a confirmed downloadable archive.
+PACK is obtained from the MiniZinc benchmark mirror, whose README attributes it
+to Carlier and Neron (2003), DOI `10.1016/S0377-2217(02)00763-4`. The source commit
+and all 55 file checksums are pinned in `benchmark_sources.json`. The MiniZinc
+data contain real activities only: conversion adds a zero-duration, zero-demand
+dummy source and sink, preserving durations, demands and precedence constraints.
+It does not use local copies from an earlier project.
 
 ## Benchmark inference
+
+Run `python prepare_benchmarks.py` with the installed project environment to
+prepare all seven families: J30/J60/J90 (480 each), J120 (600), RG30 (1,800),
+RG300 (480) and PACK (55). It uses pinned public archives and PACK source files,
+checks their hashes, and writes parser-compatible inputs under `rcpsp/`.
+Its archive cache defaults to `outputs/input_archives/`; `--cache-dir` can point
+to an existing cache. Existing different instance contents are never overwritten.
+RG instances without renewable resources remain valid and are preserved.
+This command does not change the training, validation or test partitions.
 
 `makespan_predictor.ipynb` defaults to `INSTANCE_DIR = PROJECT_ROOT / "rcpsp"`
 and `RECURSIVE = True`. It discovers `.sm` and `.rcp` files beneath this directory.

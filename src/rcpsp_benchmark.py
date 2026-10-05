@@ -27,7 +27,7 @@ def infer_problem_size(path: str | Path) -> int | None:
 
 
 # Build equivalent PSPLIB bound-lookup keys.
-# Parameters: problem_size: PSPLIB activity count; group: PSPLIB group ID; instance: parsed RCPSP instance
+# Parameters: problem_size: PSPLIB activity count; group: PSPLIB group ID; instance: within-group instance ID
 # Returns: list[str].
 def _instance_keys(problem_size: int, group: int, instance: int) -> list[str]:
     return [

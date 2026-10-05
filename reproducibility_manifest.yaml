@@ -18,13 +18,15 @@ input_source_recipe: instance_sources.json
 input_preparation_command: python prepare_instances.py
 input_integrity: pinned_archive_source_member_and_prepared_file_sha256
 input_conversion: deterministic_public_PSPLIB_and_original_RCPLIB_v2_4
+benchmark_source_recipe: benchmark_sources.json
+benchmark_preparation_command: python prepare_benchmarks.py
 dataset_guide: DATASETS.md
 datasets:
   bundled_raw_instances: false
   supported_families: [j30, j60, j90, j120, PACK, RG30, RG300]
   psplib: https://www.om-db.wi.tum.de/psplib/
   rg_library: https://github.com/MarioVanhoucke/RCPLIB-Resource-Constrained-Project-Library/releases/latest
-  pack_source_status: historical_LAAS_source_no_verified_current_direct_download
+  pack_source_status: verified_public_MiniZinc_mirror_with_pinned_commit_and_file_checksums
 architecture:
   type: shared_GRU
   iterations: 16
