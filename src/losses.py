@@ -14,6 +14,9 @@ class LossOutput:
     top1: Tensor
 
 
+# Vectorized logsumexp for variable-size graph segments.
+# Parameters: values: input quantities; index: segment indices; num_segments: segment count
+# Returns: segment log-sums and populated-segment mask.
 def _segment_logsumexp(values: Tensor, index: Tensor, num_segments: int) -> tuple[Tensor, Tensor]:
     """Vectorized logsumexp for variable-size graph segments."""
     maximum = values.new_full((num_segments,), -torch.inf)
@@ -28,6 +31,11 @@ def _segment_logsumexp(values: Tensor, index: Tensor, num_segments: int) -> tupl
     return result, present
 
 
+# Graph-balanced BCE plus differentiable top-1 set loss.
+# Parameters: logits: Border activity scores; labels: binary target labels
+#   border_graph_index: graph ID per Border node; graph_count: number of graphs; bce_weight: BCE coefficient
+#   top1_weight: top-1 loss coefficient; pos_weight: positive-label BCE weight
+# Returns: total, BCE and top-1 losses.
 def multilabel_top1_loss(
     logits: Tensor,
     labels: Tensor,

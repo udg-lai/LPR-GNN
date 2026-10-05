@@ -14,6 +14,10 @@ environment:
   torch: 2.5.1+cu121
 configuration_file: config.yaml
 split_manifest: instance_splits.json
+input_source_recipe: instance_sources.json
+input_preparation_command: python prepare_instances.py
+input_integrity: pinned_archive_source_member_and_prepared_file_sha256
+input_conversion: deterministic_public_PSPLIB_and_original_RCPLIB_v2_4
 dataset_guide: DATASETS.md
 datasets:
   bundled_raw_instances: false

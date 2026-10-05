@@ -14,6 +14,10 @@ class MetricAccumulator:
     graph_count: int = 0
     confusion_counts: Optional[Tensor] = None
 
+    # Accumulate exact metrics on the device without synchronizing per batch.
+    # Parameters: logits: Border activity scores; labels: binary target labels
+    #   border_ptr: Border segment offsets
+    # Returns: None; updates state or writes output.
     def update(self, logits: Tensor, labels: Tensor, border_ptr: Tensor) -> None:
         """Accumulate exact metrics on the device without synchronizing per batch."""
         logits = logits.detach().float().reshape(-1)
@@ -68,6 +72,9 @@ class MetricAccumulator:
             self.top1_correct += batch_top1_correct
         self.graph_count += batch_graph_count
 
+    # Transfer the accumulated scalars to the CPU in one synchronization.
+    # Parameters: none (uses instance/enclosing state).
+    # Returns: aggregated metric dictionary.
     def compute(self) -> Dict[str, float]:
         """Transfer the accumulated scalars to the CPU in one synchronization."""
         eps = 1e-12

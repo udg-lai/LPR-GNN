@@ -45,6 +45,12 @@ The reference environment uses **Python 3.11.15**, recorded in `.python-version`
 Install that interpreter before creating the environment: `requirements.txt`
 installs packages, not Python itself. On Windows, from the repository root:
 
+Python 3.11.15 has no python.org Windows installer. One option is the
+[Astral uv managed interpreter](https://docs.astral.sh/uv/guides/install-python/):
+`uv python install 3.11.15`, then `uv venv --python 3.11.15 PTR-GNN`.
+Use the environment's Python executable for the installation and kernel commands
+below; the `py -3.11` commands apply only if that launcher selects exactly 3.11.15.
+
 ```powershell
 py -3.11 -c "import sys; assert sys.version_info[:3] == (3, 11, 15), sys.version"
 py -3.11 -m venv PTR-GNN
@@ -74,6 +80,13 @@ First download and prepare the raw instances following [DATASETS.md](DATASETS.md
 That guide lists the external sources, the required directories, and the frozen
 split's format, filename and SHA-256 requirements. Cloning alone does not supply
 the instances required for graph generation, validation or test.
+
+From the repository root, run `python prepare_instances.py` with the installed
+project environment. It downloads checksum-verified public PSPLIB and RCPLIB v2.4
+archives, converts the required Patterson inputs deterministically, validates all
+training reference schedules, and places the three fixed partitions. No local
+copies from an earlier project are required. The source recipe is
+`instance_sources.json`; prepared-file hashes are in `instance_splits.json`.
 
 Start Jupyter from the repository root and run these notebooks in order:
 
@@ -107,8 +120,10 @@ duration scaling. The generation seed follows the YAML seed.
   directly in each directory, as specified in `instance_splits.json`.
 - Keep each manifest entry's format: training/validation include both `.RCP`
   and `.sm` files; test uses `.rcp`. Do not change extensions to match a family name.
-- `instance_splits.json`: frozen memberships and SHA-256 hashes (1,106 train,
-  122 validation, 180 test instances). Do not resplit individual graphs.
+- `instance_splits.json`: fixed memberships and SHA-256 hashes of reproducibly
+  prepared public inputs (1,106 train, 122 validation, 180 test instances).
+  Do not resplit individual graphs. `instance_sources.json` pins archives, source
+  members and conversions; `prepare_instances.py` creates and verifies these inputs.
 - `data/train/`: initially empty; populated by graph generation.
 - `outputs/`: created only when running the code; excluded from Git.
 

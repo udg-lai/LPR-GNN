@@ -37,15 +37,24 @@ class ScheduleResult:
     solution: List[List[int]]
     decisions: List[dict]
 
+    # Export the schedule result as a dictionary.
+    # Parameters: none (uses instance/enclosing state).
+    # Returns: dict.
     def as_dict(self) -> dict:
         return asdict(self)
 
 
+# Deterministic choice, not a model score (probability 1, sentinel logit 0).
+# Parameters: node: selected activity ID
+# Returns: BorderPrediction.
 def forced_border_prediction(node: int) -> BorderPrediction:
     """Deterministic choice, not a model score (probability 1, sentinel logit 0)."""
     return BorderPrediction(int(node), 0.0, 1.0, [])
 
 
+# In-place max-plus Floyd-Warshall used by the original scheduling code.
+# Parameters: matrix: temporal distance matrix; inf: unreachable-distance sentinel
+# Returns: None; updates state or writes output.
 def longest_path_closure(matrix: MutableSequence[MutableSequence[int]], inf: int = INF) -> None:
     """In-place max-plus Floyd-Warshall used by the original scheduling code."""
 
@@ -64,6 +73,9 @@ def longest_path_closure(matrix: MutableSequence[MutableSequence[int]], inf: int
                     matrix[source][target] = candidate
 
 
+# Propagate changes in the source row through an already closed matrix.
+# Parameters: matrix: temporal distance matrix; inf: unreachable-distance sentinel
+# Returns: None; updates state or writes output.
 def propagate_earliest_start_times(
     matrix: MutableSequence[MutableSequence[int]],
     inf: int = INF,
@@ -97,6 +109,10 @@ def propagate_earliest_start_times(
     matrix[0][:] = propagated
 
 
+# Extract an activity resource-demand vector.
+# Parameters: nodes_dict: activity durations and demands; node_id: activity ID
+#   num_resources: resource channel count
+# Returns: List[int].
 def _resources_for_node(
     nodes_dict: Mapping[str, Sequence[int]],
     node_id: int,
@@ -108,6 +124,10 @@ def _resources_for_node(
     ]
 
 
+# Read residual capacities at one time instant.
+# Parameters: resource_time: residual resource-time profile; time_index: time instant
+#   num_resources: resource channel count
+# Returns: List[int].
 def _resources_at_time(
     resource_time: np.ndarray,
     time_index: int,
@@ -122,6 +142,9 @@ def _resources_at_time(
     return values[:num_resources] + [0] * max(0, num_resources - len(values))
 
 
+# Initialize activity sets, temporal constraints and resource availability.
+# Parameters: instance: parsed RCPSP instance; max_time: schedule horizon
+# Returns: features, capacities, matrices, resource profile and activity sets.
 def initialize_schedule_state(
     instance: MRCPSPInstance,
     max_time: int,
@@ -160,6 +183,11 @@ def initialize_schedule_state(
     )
 
 
+# Schedule an activity and refresh eligibility and resource availability.
+# Parameters: nodes_dict: activity durations and demands; resource_levels: resource capacities
+#   matrix: temporal distance matrix; node: selected activity ID; border: eligible activity IDs
+#   others: non-Border activities; resource_time: residual resource-time profile
+# Returns: updated Border and Other sets.
 def update_schedule_state(
     nodes_dict: Mapping[str, Sequence[int]],
     resource_levels: Sequence[int],
@@ -238,6 +266,10 @@ def update_schedule_state(
     return border, others
 
 
+# Build bidirectional temporal edges at the configured time distances.
+# Parameters: minimum_time: first time instant; maximum_time: last time instant
+#   scales: temporal edge distances
+# Returns: List[dict].
 def build_temporal_multiscale_edges(
     minimum_time: int,
     maximum_time: int,
@@ -270,6 +302,12 @@ def build_temporal_multiscale_edges(
     return links
 
 
+# Build the heterogeneous node-link graph for the current schedule state.
+# Parameters: nodes_dict: activity durations and demands; matrix: temporal distance matrix
+#   border: eligible activity IDs; resource_time: residual resource-time profile
+#   all_nodes: original activity IDs; positive_nodes: reference-consistent activity IDs
+#   resource_capacities: instance resource capacities
+# Returns: dict.
 def generate_dynamic_graph(
     nodes_dict: Mapping[str, Sequence[int]],
     matrix: Sequence[Sequence[int]],
@@ -459,6 +497,11 @@ def generate_dynamic_graph(
     }
 
 
+# Add the immutable original precedence relations used during training.
+# Parameters: graph: node-link graph; original_matrix: immutable precedence matrix
+#   nodes_dict: activity durations and demands; border: eligible activity IDs
+#   all_nodes: original activity IDs
+# Returns: dict.
 def add_typed_original_relations(
     graph: Mapping,
     original_matrix: Sequence[Sequence[int]],
@@ -483,6 +526,11 @@ def add_typed_original_relations(
         edge["key"] = next_key[pair]
         next_key[pair] += 1
 
+    # Append one typed original-precedence edge.
+    # Parameters: source: source features or activity ID; target: destination activity ID
+    #   relation: typed edge relation; way: relation direction marker; delta: temporal distance
+    #   duration: activity duration
+    # Returns: None; updates state or writes output.
     def append_relation(
         source: int,
         target: int,
@@ -557,6 +605,9 @@ def add_typed_original_relations(
     return output
 
 
+# Convert a predicted identifier to a Python scalar.
+# Parameters: value: input value
+# Returns: int | str.
 def _python_node_id(value: object) -> int | str:
     try:
         return int(value)  # type: ignore[arg-type]
@@ -564,6 +615,9 @@ def _python_node_id(value: object) -> int | str:
         return str(value)
 
 
+# Run the PyG model on one dynamically generated graph and return top-1.
+# Parameters: model: priority network; graph: node-link graph; device: compute device
+# Returns: BorderPrediction.
 def predict_border_node(
     model: nn.Module,
     graph: Mapping,
@@ -629,6 +683,9 @@ class _BatchedScheduleState:
     step: int = 0
 
 
+# Initialize one state for batched schedule construction.
+# Parameters: instance: parsed RCPSP instance; max_time: schedule horizon
+# Returns: _BatchedScheduleState.
 def _initialize_batched_schedule_state(
     instance: MRCPSPInstance,
     max_time: int,
@@ -657,6 +714,9 @@ def _initialize_batched_schedule_state(
     )
 
 
+# Prepare a partial-state graph and its Border identifiers.
+# Parameters: state: partial schedule state; graph_transform: optional graph normalization
+# Returns: parsed graph and original Border IDs.
 def _prepare_batched_border_graph(
     state: _BatchedScheduleState,
     graph_transform: GraphTransform | None,
@@ -685,6 +745,10 @@ def _prepare_batched_border_graph(
     return data, border_metadata(data)[0]
 
 
+# Score several independent rollout states in one PyG forward pass.
+# Parameters: model: priority network; prepared_graphs: parsed graphs with activity IDs
+#   device: compute device; include_scores: retain selected-node scores
+# Returns: list[BorderPrediction].
 def _predict_prepared_border_nodes(
     model: nn.Module,
     prepared_graphs: Sequence[tuple[object, list[object]]],
@@ -761,6 +825,9 @@ def _predict_prepared_border_nodes(
     return predictions
 
 
+# Apply a selected activity to its schedule state.
+# Parameters: state: partial schedule state; prediction: selected activity and scores
+# Returns: None; updates state or writes output.
 def _apply_batched_prediction(
     state: _BatchedScheduleState,
     prediction: BorderPrediction,
@@ -799,6 +866,9 @@ def _apply_batched_prediction(
     state.step += 1
 
 
+# Collect the completed schedule and makespan.
+# Parameters: state: partial schedule state
+# Returns: ScheduleResult.
 def _finalize_batched_schedule_state(state: _BatchedScheduleState) -> ScheduleResult:
     sink = len(state.matrix) - 1
     solution = list(state.solution)
@@ -810,6 +880,12 @@ def _finalize_batched_schedule_state(state: _BatchedScheduleState) -> ScheduleRe
     )
 
 
+# Run independent schedules with batched GNN inference.
+# Parameters: model: priority network; instances: independent RCPSP instances
+#   max_times: schedule horizon per instance; device: compute device
+#   graph_transform: optional graph normalization; graph_workers: graph preparation threads
+#   include_scores: retain selected-node scores
+# Returns: list[ScheduleResult].
 def calculate_makespans_batched(
     model: nn.Module,
     instances: Sequence[MRCPSPInstance],
@@ -898,6 +974,10 @@ Selector = Callable[[dict, set[int], int], BorderPrediction]
 GraphTransform = Callable[[Mapping], dict]
 
 
+# Serial schedule generation using a model/heuristic selector per border.
+# Parameters: instance: parsed RCPSP instance; max_time: schedule horizon
+#   selector: activity-selection callback; skip_singleton: bypass forced decisions
+# Returns: ScheduleResult.
 def calculate_makespan_with_selector(
     instance: MRCPSPInstance,
     max_time: int,
@@ -977,6 +1057,10 @@ def calculate_makespan_with_selector(
     )
 
 
+# Construct a feasible schedule using learned priorities.
+# Parameters: model: priority network; instance: parsed RCPSP instance; max_time: schedule horizon
+#   device: compute device; graph_transform: optional graph normalization
+# Returns: ScheduleResult.
 def calculate_makespan(
     model: nn.Module,
     instance: MRCPSPInstance,
@@ -988,6 +1072,9 @@ def calculate_makespan(
 
     device = torch.device(device)
 
+    # Normalize a decision graph and choose its top-scoring activity.
+    # Parameters: graph: node-link graph; border: eligible activity IDs; step: construction step
+    # Returns: BorderPrediction.
     def selector(graph: dict, border: set[int], step: int) -> BorderPrediction:
         del border, step
         if graph_transform is not None:
@@ -997,6 +1084,9 @@ def calculate_makespan(
     return calculate_makespan_with_selector(instance, max_time, selector, skip_singleton=True)
 
 
+# Simple deterministic selector useful as a baseline and for unit tests.
+# Parameters: graph: node-link graph; border: eligible activity IDs; step: construction step
+# Returns: BorderPrediction.
 def earliest_start_selector(
     graph: dict,
     border: set[int],

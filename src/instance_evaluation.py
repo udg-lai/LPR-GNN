@@ -14,10 +14,16 @@ from .rcpsp_instance import parse_mrcpsp
 from .rcpsp_schedule import calculate_makespans_batched
 
 
+# Compute a file SHA-256 digest.
+# Parameters: path: input/output path
+# Returns: SHA-256 hex string.
 def file_hash(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+# Verify instance integrity, split separation and graph membership.
+# Parameters: config: project settings
+# Returns: split paths and manifest SHA-256.
 def load_instance_splits(config):
     root = Path(config['_project_root'])
     manifest_path = root / config['instance_evaluation']['manifest']
@@ -57,6 +63,10 @@ def load_instance_splits(config):
     return splits, file_hash(manifest_path)
 
 
+# Arithmetic mean over ALL instances; any failed rollout aborts evaluation.
+# Parameters: model: priority network; paths: instance paths; device: compute device; config: project settings
+#   output_path: optional output destination
+# Returns: instance count, mean makespan and elapsed seconds.
 def evaluate_instances(model, paths, device, config, output_path=None):
     """Arithmetic mean over ALL instances; any failed rollout aborts evaluation.
 
@@ -110,6 +120,10 @@ def evaluate_instances(model, paths, device, config, output_path=None):
     return summary
 
 
+# Evaluate held-out instances and write their makespan table.
+# Parameters: model: priority network; config: project settings; device: compute device
+#   output_dir: output directory; splits: instance paths by partition
+# Returns: validation and test rollout summaries.
 def final_instance_evaluation(model, config, device, output_dir, splits):
     summaries = {
         split: evaluate_instances(model, splits[split], device, config,

@@ -11,6 +11,9 @@ STATE_DICT_KEYS = ("model_state", "model_state_dict", "state_dict")
 STATE_KEY_PREFIXES = ("module.", "_orig_mod.", "model.")
 
 
+# Load a checkpoint across PyTorch versions.
+# Parameters: path: input/output path; map_location: checkpoint target device
+# Returns: Any.
 def load_checkpoint(path: str | Path, map_location: torch.device | str) -> Any:
     """Load a checkpoint across PyTorch versions."""
 
@@ -20,6 +23,9 @@ def load_checkpoint(path: str | Path, map_location: torch.device | str) -> Any:
         return torch.load(path, map_location=map_location)
 
 
+# Extract and normalize a model state dictionary from common checkpoints.
+# Parameters: checkpoint: loaded checkpoint
+# Returns: dict[str, Tensor].
 def extract_model_state(checkpoint: Any) -> dict[str, Tensor]:
     """Extract and normalize a model state dictionary from common checkpoints."""
 
@@ -54,12 +60,18 @@ def extract_model_state(checkpoint: Any) -> dict[str, Tensor]:
     return normalized
 
 
+# Load normalized checkpoint weights into model.
+# Parameters: model: priority network; checkpoint: loaded checkpoint; strict: require exact state keys
+# Returns: None; updates state or writes output.
 def load_model_state(model: nn.Module, checkpoint: Any, *, strict: bool = True) -> None:
     """Load normalized checkpoint weights into ``model``."""
 
     model.load_state_dict(extract_model_state(checkpoint), strict=strict)
 
 
+# Return portable keys for plain, compiled or data-parallel models.
+# Parameters: model: priority network
+# Returns: dict[str, Tensor].
 def model_state_dict(model: nn.Module) -> dict[str, Tensor]:
     """Return portable keys for plain, compiled or data-parallel models."""
 

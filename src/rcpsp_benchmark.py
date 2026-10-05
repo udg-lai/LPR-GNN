@@ -5,6 +5,9 @@ from pathlib import Path
 from typing import Dict
 
 
+# Canonicalize an instance filename for bound lookup.
+# Parameters: value: input value
+# Returns: str.
 def normalize_instance_name(value: str | Path) -> str:
     name = Path(str(value).replace("\\", "/")).name.lower().strip()
     if name.endswith(".pat.data"):
@@ -15,11 +18,17 @@ def normalize_instance_name(value: str | Path) -> str:
     return name.replace("-", "_")
 
 
+# Infer the PSPLIB family size from a filename.
+# Parameters: path: input/output path
+# Returns: int | None.
 def infer_problem_size(path: str | Path) -> int | None:
     match = re.search(r"j(\d+)", Path(path).name.lower())
     return int(match.group(1)) if match else None
 
 
+# Build equivalent PSPLIB bound-lookup keys.
+# Parameters: problem_size: PSPLIB activity count; group: PSPLIB group ID; instance: parsed RCPSP instance
+# Returns: list[str].
 def _instance_keys(problem_size: int, group: int, instance: int) -> list[str]:
     return [
         f"j{problem_size}{group}_{instance}",
@@ -27,10 +36,16 @@ def _instance_keys(problem_size: int, group: int, instance: int) -> list[str]:
     ]
 
 
+# Build equivalent PACK bound-lookup keys.
+# Parameters: number: PACK instance ID
+# Returns: list[str].
 def _pack_keys(number: int) -> list[str]:
     return [f"pack{number:03d}", f"pack{number}"]
 
 
+# Read reference bounds into a filename-keyed mapping.
+# Parameters: path: input/output path; problem_size: PSPLIB activity count
+# Returns: Dict[str, int].
 def load_bounds_file(path: str | Path, problem_size: int | None = None) -> Dict[str, int]:
     path = Path(path)
     problem_size = infer_problem_size(path) if problem_size is None else problem_size
@@ -84,6 +99,9 @@ def load_bounds_file(path: str | Path, problem_size: int | None = None) -> Dict[
     return bounds
 
 
+# Look up an instance bound with a fallback.
+# Parameters: filename: instance filename; bounds: reference makespans; default: fallback bound
+# Returns: int.
 def get_bound(filename: str | Path, bounds: Dict[str, int], default: int = -1) -> int:
     key = normalize_instance_name(filename)
     if key in bounds:

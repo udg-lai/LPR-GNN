@@ -59,6 +59,9 @@ EDGE_RESOURCE_INDICES = {
 }
 
 
+# Return a stable ModuleDict key for a heterogeneous relation tuple.
+# Parameters: relation: typed edge relation
+# Returns: str.
 def relation_module_key(relation: Relation) -> str:
     """Return a stable ModuleDict key for a heterogeneous relation tuple."""
     return "__".join(relation).replace("-", "_")
@@ -76,9 +79,17 @@ PROPAGATION_RELATIONS: Tuple[Relation, ...] = tuple(
 class WeightedSumAggregation(MessagePassing):
     """Scale source states per edge and sum them at the destination."""
 
+    # Initialize WeightedSumAggregation.
+    # Parameters: none (uses instance/enclosing state).
+    # Returns: None; updates state or writes output.
     def __init__(self) -> None:
         super().__init__(aggr="add", flow="source_to_target", node_dim=0)
 
+    # Aggregate weighted, edge-conditioned messages.
+    # Parameters: source: source features or activity ID; destination: destination features
+    #   edge_index: source/destination indices; edge_weight: message weights
+    #   edge_feature: encoded edge attributes
+    # Returns: encoded features or aggregated messages.
     def forward(
         self,
         source: Tensor,
@@ -95,6 +106,10 @@ class WeightedSumAggregation(MessagePassing):
             size=(source.shape[0], destination.shape[0]),
         )
 
+    # Weight and enrich source-node messages.
+    # Parameters: x_j: source-node message features; edge_weight: message weights
+    #   edge_feature: encoded edge attributes
+    # Returns: Tensor.
     def message(
         self, x_j: Tensor, edge_weight: Tensor, edge_feature: Tensor
     ) -> Tensor:
@@ -104,6 +119,10 @@ class WeightedSumAggregation(MessagePassing):
 class PermutationInvariantResourceEncoder(nn.Module):
     """DeepSets encoder for scalar features plus anonymous resource channels."""
 
+    # Initialize PermutationInvariantResourceEncoder.
+    # Parameters: input_width: input feature width; resource_indices: resource feature positions
+    #   output_width: embedding width
+    # Returns: None; updates state or writes output.
     def __init__(
         self,
         input_width: int,
@@ -146,6 +165,9 @@ class PermutationInvariantResourceEncoder(nn.Module):
         )
         self.reset_parameters()
 
+    # Initialize learnable network weights.
+    # Parameters: none (uses instance/enclosing state).
+    # Returns: None; updates state or writes output.
     def reset_parameters(self) -> None:
         for layer in self.resource_item_encoder:
             if isinstance(layer, nn.Linear):
@@ -155,6 +177,9 @@ class PermutationInvariantResourceEncoder(nn.Module):
         if self.scalar_encoder is not None:
             nn.init.xavier_uniform_(self.scalar_encoder.weight)
 
+    # Encode node features independently of resource-channel order.
+    # Parameters: features: node features
+    # Returns: encoded features or aggregated messages.
     def forward(self, features: Tensor) -> Tensor:
         if features.ndim != 2 or features.shape[1] != self.input_width:
             raise ValueError(
@@ -174,6 +199,9 @@ class PermutationInvariantResourceEncoder(nn.Module):
 class PermutationInvariantResourcePairEncoder(nn.Module):
     """Encode aligned source/destination resource pairs as an anonymous set."""
 
+    # Initialize PermutationInvariantResourcePairEncoder.
+    # Parameters: output_width: embedding width
+    # Returns: None; updates state or writes output.
     def __init__(self, output_width: int) -> None:
         super().__init__()
         self.output_width = int(output_width)
@@ -184,6 +212,9 @@ class PermutationInvariantResourcePairEncoder(nn.Module):
         )
         self.reset_parameters()
 
+    # Initialize learnable network weights.
+    # Parameters: none (uses instance/enclosing state).
+    # Returns: None; updates state or writes output.
     def reset_parameters(self) -> None:
         for layer in self.item_encoder:
             if isinstance(layer, nn.Linear):
@@ -191,6 +222,10 @@ class PermutationInvariantResourcePairEncoder(nn.Module):
                 if layer.bias is not None:
                     nn.init.zeros_(layer.bias)
 
+    # Encode paired source and destination resource channels.
+    # Parameters: source_resources: source resource channels
+    #   destination_resources: destination resource channels
+    # Returns: encoded features or aggregated messages.
     def forward(
         self,
         source_resources: Tensor,
@@ -211,6 +246,10 @@ class RcpspGNN(nn.Module):
     sums incoming source states and applies a GRU update to the destination.
     """
 
+    # Initialize RcpspGNN.
+    # Parameters: state_dim: node hidden-state width; num_iterations: message-passing iterations
+    #   readout_hidden: readout hidden width; readout_dropout: readout dropout rate
+    # Returns: None; updates state or writes output.
     def __init__(
         self,
         state_dim: int = 32,
@@ -307,6 +346,9 @@ class RcpspGNN(nn.Module):
 
         self.reset_parameters()
 
+    # Initialize feed-forward weights with Xavier and recurrent weights safely.
+    # Parameters: none (uses instance/enclosing state).
+    # Returns: None; updates state or writes output.
     def reset_parameters(self) -> None:
         """Initialize feed-forward weights with Xavier and recurrent weights safely."""
         for encoder in self.node_encoders.values():
@@ -348,6 +390,9 @@ class RcpspGNN(nn.Module):
             nn.init.zeros_(cell.bias_ih)
             nn.init.zeros_(cell.bias_hh)
 
+    # Encode features into initial node states.
+    # Parameters: node_type: entity type; features: node features
+    # Returns: Tensor.
     def _build_state(self, node_type: str, features: Tensor) -> Tensor:
         if features.ndim != 2:
             raise ValueError(f"Expected a 2-D feature tensor, got {tuple(features.shape)}")
@@ -365,6 +410,9 @@ class RcpspGNN(nn.Module):
         type_embedding = self.entity_embedding.weight[ENTITY_TO_INDEX[node_type]]
         return self.node_norms[node_type](encoded + type_embedding.unsqueeze(0))
 
+    # Get graph membership for nodes of one type.
+    # Parameters: data: heterogeneous graph batch; node_type: entity type
+    # Returns: Tensor.
     @staticmethod
     def _node_batch(data: HeteroData, node_type: str) -> Tensor:
         store = data[node_type]
@@ -372,6 +420,10 @@ class RcpspGNN(nn.Module):
             return store.batch
         return torch.zeros(store.num_nodes, dtype=torch.long, device=store.x.device)
 
+    # Identify graphs containing the requested relation.
+    # Parameters: data: heterogeneous graph batch; relation: typed edge relation
+    #   graph_count: number of graphs
+    # Returns: Boolean mask of graphs with that relation.
     def _relation_active_graphs(
         self,
         data: HeteroData,
@@ -387,6 +439,9 @@ class RcpspGNN(nn.Module):
             active.index_fill_(0, edge_graphs, True)
         return active
 
+    # Extract the resource channels of node features.
+    # Parameters: node_type: entity type; features: node features
+    # Returns: Tensor.
     @staticmethod
     def _resource_channels(node_type: str, features: Tensor) -> Tensor:
         if node_type == "time-resources":
@@ -395,6 +450,10 @@ class RcpspGNN(nn.Module):
             return features[:, 1:5]
         raise ValueError(f"Unsupported node type: {node_type!r}")
 
+    # Aggregate messages for one typed relation.
+    # Parameters: data: heterogeneous graph batch; relation: typed edge relation
+    #   states: hidden states by entity
+    # Returns: Tensor.
     def _sum_messages(
         self,
         data: HeteroData,
@@ -460,6 +519,10 @@ class RcpspGNN(nn.Module):
         aggregated.index_add_(0, edge_index[1], message)
         return aggregated
 
+    # Aggregate relation messages with their weights.
+    # Parameters: data: heterogeneous graph batch; relation: typed edge relation
+    #   states: hidden states by entity
+    # Returns: Tensor.
     def _sum_weighted_messages(
         self,
         data: HeteroData,
@@ -476,6 +539,10 @@ class RcpspGNN(nn.Module):
             self.legacy_delta_encoder(store.edge_attr),
         )
 
+    # Update destination states for one relation.
+    # Parameters: data: heterogeneous graph batch; relation: typed edge relation
+    #   states: hidden states by entity; node_batch: graph IDs by node type; graph_count: number of graphs
+    # Returns: None; updates state or writes output.
     def _apply_relation(
         self,
         data: HeteroData,
@@ -492,6 +559,10 @@ class RcpspGNN(nn.Module):
             graph_count,
         )
 
+    # Combine one propagation stage and update its destinations.
+    # Parameters: data: heterogeneous graph batch; relations: relations in one propagation stage
+    #   states: hidden states by entity; node_batch: graph IDs by node type; graph_count: number of graphs
+    # Returns: None; updates state or writes output.
     def _apply_relations(
         self,
         data: HeteroData,
@@ -522,6 +593,10 @@ class RcpspGNN(nn.Module):
             active,
         )
 
+    # Update hidden states only in active graphs.
+    # Parameters: cell: GRU cell; message: aggregated incoming messages; old_state: previous hidden states
+    #   destination_batch: graph IDs of destination nodes; active_graphs: graphs to update
+    # Returns: hidden states with inactive graphs preserved.
     @staticmethod
     def _masked_gru_update(
         cell: nn.GRUCell,
@@ -536,6 +611,9 @@ class RcpspGNN(nn.Module):
         active_nodes = active_graphs.index_select(0, destination_batch).unsqueeze(1)
         return torch.where(active_nodes, candidate, old_state)
 
+    # Build Border readout features with graph context.
+    # Parameters: data: heterogeneous graph batch; states: hidden states by entity
+    # Returns: Border embeddings concatenated with Other and time-resource context.
     def _build_readout_features(
         self,
         data: HeteroData,
@@ -552,6 +630,9 @@ class RcpspGNN(nn.Module):
             dim=-1,
         )
 
+    # Propagate node states and score eligible activities.
+    # Parameters: data: heterogeneous graph batch
+    # Returns: Border activity logits.
     def forward(self, data: HeteroData) -> Tensor:
         states: Dict[str, Tensor] = {
             "border": self._build_state("border", data["border"].x),

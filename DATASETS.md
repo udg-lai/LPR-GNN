@@ -55,24 +55,28 @@ Benchmark storage alone does not prepare the training split. The frozen
 | Validation J30/J60/J90 | `data/validation/<manifest filename>` | 122 |
 | Test RG30 | `data/test/<manifest filename>.rcp` | 180 |
 
-1. Read each entry in `instance_splits.json` and copy its instance to that exact
-   relative path. Validation and test files go directly in their directories,
-   without additional family subdirectories. Preserve the frozen memberships.
-2. Training graph generation also reads `source_data/training_sources.csv`.
-   Preserve its `file`, `file_type`, and `sequence` columns and their associations
-   with the training instances. These are reference activity orders, not raw instances.
-3. Preserve the format and extension of each manifest entry. Training uses 770
-   Patterson-format `.RCP` instances and 336 native `.sm` instances; validation
-   uses 87 `.RCP` and 35 `.sm` instances. Public PSPLIB downloads normally use `.sm`,
-   so downloading and renaming them is insufficient for the `.RCP` entries.
-   For exact reproduction, supply the byte-identical copies used to create the
-   manifest (for example, from your original project). A semantic conversion alone
-   may still differ in whitespace and fail SHA-256 checks. Native `.sm` entries
-   likewise must match their stored hashes, including headers and line endings.
-4. Do not remove or replace hashes to hide a mismatch. An independently prepared
-   corpus requires deliberate conversion, matching reference activity numbering,
-   an updated CSV and manifest, and validation of the split. It is not the frozen
-   corpus merely because the projects have similar names.
+1. Run `python prepare_instances.py` using the project environment. It downloads
+   the pinned public archives and places instances at the exact manifest paths.
+   An existing file with different contents is rejected, not overwritten.
+2. `instance_sources.json` records each upstream archive, member, source hash and
+   conversion. Archive hashes and prepared-file hashes are checked independently.
+   Archives are cached under `outputs/input_archives/`. To reuse archives downloaded
+   from the same public sources, use `--cache-dir <archive-directory>`; the same
+   checksum checks apply. Upstream changes fail explicitly.
+3. Native `.sm` members retain their bytes. Required `.RCP` files are converted
+   from PSPLIB with the supplied parser, preserving zero-based activity identity,
+   durations, demands, capacities and precedence relations. RG30 test inputs come
+   from `original/RG30_<id>.rcp` in `ALL/ALL.tar` in RCPLIB v2.4. Patterson output
+   uses integer tokens, single spaces, LF and a final newline. Wrapped successor
+   lists are interpreted by their declared counts. No instance data are redistributed.
+4. The published memberships and `source_data/training_sources.csv` are unchanged.
+   The manifest now pins these reproducibly prepared public files, not unprovided
+   project-specific byte representations. All 1,106 training reference schedules
+   are checked for activity coverage, precedence and resource feasibility before
+   placement. This is an input-preparation repair, not evidence that a retraining
+   run reproduces the archived metrics exactly. Published inference weights and
+   result tables are unchanged. Old project checkpoint resumes tied to a different
+   split-manifest hash are intentionally incompatible; do not bypass that check.
 5. Run `create_graphs_training.ipynb` to populate `data/train/`, then run
    `training.ipynb`. Validation and test are rollouts on raw instances; do not
    generate validation/test graph datasets. Finally run `makespan_predictor.ipynb`.

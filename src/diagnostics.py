@@ -9,6 +9,10 @@ import torch
 from torch import Tensor, nn
 
 
+# Return the first maximum node index in every graph segment.
+# Parameters: logits: Border activity scores; graph_index: graph segment indices
+#   graph_count: number of graphs
+# Returns: first maximum node index per graph.
 def _first_segment_argmax(logits: Tensor, graph_index: Tensor, graph_count: int) -> Tensor:
     """Return the first maximum node index in every graph segment."""
     graph_maximum = logits.new_full((graph_count,), -torch.inf)
@@ -33,6 +37,9 @@ def _first_segment_argmax(logits: Tensor, graph_index: Tensor, graph_count: int)
     return result
 
 
+# Compute exact ROC AUC from average ranks, including tied scores.
+# Parameters: scores: prediction scores; labels: binary target labels
+# Returns: ROC AUC, or NaN when a class is absent.
 def _binary_auc(scores: Tensor, labels: Tensor) -> float:
     """Compute exact ROC AUC from average ranks, including tied scores."""
     scores = scores.detach().float().cpu().reshape(-1)
@@ -80,6 +87,10 @@ class FullSelectionDiagnostics:
     _target_ranks: list[Tensor] = field(default_factory=list)
     _border_sizes: list[Tensor] = field(default_factory=list)
 
+    # Accumulate node and decision statistics.
+    # Parameters: logits: Border activity scores; labels: binary target labels
+    #   border_ptr: Border segment offsets
+    # Returns: None; updates state or writes output.
     def update(self, logits: Tensor, labels: Tensor, border_ptr: Tensor) -> None:
         logits = logits.detach().float().reshape(-1)
         labels = labels.detach().reshape(-1) > 0.5
@@ -170,6 +181,9 @@ class FullSelectionDiagnostics:
         self._target_ranks.append(target_ranks)
         self._border_sizes.append(border_sizes.cpu())
 
+    # Summarize accumulated selection statistics.
+    # Parameters: none (uses instance/enclosing state).
+    # Returns: aggregated metric dictionary.
     def compute(self) -> Dict[str, float | int | str]:
         eps = 1e-12
         tp = self.true_positives
@@ -229,6 +243,10 @@ class FullSelectionDiagnostics:
         }
 
 
+# Collect full node and decision diagnostics.
+# Parameters: model: priority network; loader: graph data loader; device: compute device
+#   threshold_logit: binary classification threshold
+# Returns: Dict[str, float | int | str].
 def evaluate_full_selection_diagnostics(
     model: nn.Module,
     loader: Iterable,
@@ -282,6 +300,9 @@ DIAGNOSTIC_ROWS = (
 )
 
 
+# Format a table value for LaTeX.
+# Parameters: value: input value; style: numeric display style
+# Returns: str.
 def _format_value(value: object, style: str) -> str:
     if style == "count":
         return f"{int(value):,}"
@@ -310,6 +331,10 @@ PERFORMANCE_ROWS = (
 )
 
 
+# Write the compact five-row final performance table.
+# Parameters: metrics: metrics by dataset; latex_path: LaTeX destination; csv_path: optional CSV destination
+#   rows: table row definitions; caption: table caption
+# Returns: None; updates state or writes output.
 def write_performance_metrics_table(
     metrics: Mapping[str, Mapping[str, object]],
     latex_path: str | Path,
@@ -365,6 +390,10 @@ def write_performance_metrics_table(
             writer.writerows(csv_rows)
 
 
+# Write detailed selection diagnostics tables.
+# Parameters: diagnostics: diagnostics by dataset; latex_path: LaTeX destination
+#   csv_path: optional CSV destination; caption: table caption; columns: table column definitions
+# Returns: None; updates state or writes output.
 def write_full_selection_diagnostics(
     diagnostics: Mapping[str, Mapping[str, object]],
     latex_path: str | Path,

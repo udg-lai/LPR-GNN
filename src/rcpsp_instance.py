@@ -20,6 +20,9 @@ class MRCPSPInstance:
     successors: List[List[int]] = field(default_factory=list)
     n_modes: List[int] = field(default_factory=list)
 
+    # Allocate missing per-activity storage.
+    # Parameters: none (uses instance/enclosing state).
+    # Returns: None; updates state or writes output.
     def __post_init__(self) -> None:
         if not self.durations:
             self.durations = [[] for _ in range(self.n_activities)]
@@ -31,17 +34,28 @@ class MRCPSPInstance:
                 for _ in range(self.n_activities)
             ]
 
+    # Set a resource capacity.
+    # Parameters: resource_index: resource index; capacity: resource capacity
+    # Returns: None; updates state or writes output.
     def set_capacity(self, resource_index: int, capacity: int) -> None:
         while len(self.capacities) <= resource_index:
             self.capacities.append(0)
         self.capacities[resource_index] = int(capacity)
 
+    # Set an activity-mode duration.
+    # Parameters: activity_index: activity index; mode_index: execution mode index
+    #   duration: activity duration
+    # Returns: None; updates state or writes output.
     def set_duration(self, activity_index: int, mode_index: int, duration: int) -> None:
         values = self.durations[activity_index]
         while len(values) <= mode_index:
             values.append(0)
         values[mode_index] = int(duration)
 
+    # Set an activity-mode resource demand.
+    # Parameters: activity_index: activity index; resource_index: resource index
+    #   mode_index: execution mode index; demand: resource consumption
+    # Returns: None; updates state or writes output.
     def set_demand(
         self,
         activity_index: int,
@@ -54,15 +68,24 @@ class MRCPSPInstance:
             values.append(0)
         values[mode_index] = int(demand)
 
+    # Set an activity mode count.
+    # Parameters: activity_index: activity index; n_modes: number of execution modes
+    # Returns: None; updates state or writes output.
     def set_n_modes(self, activity_index: int, n_modes: int) -> None:
         while len(self.n_modes) <= activity_index:
             self.n_modes.append(1)
         self.n_modes[activity_index] = int(n_modes)
 
+    # Append a precedence successor.
+    # Parameters: activity_index: activity index; successor_index: successor activity index
+    # Returns: None; updates state or writes output.
     def add_successor(self, activity_index: int, successor_index: int) -> None:
         self.successors[activity_index].append(int(successor_index))
 
 
+# Dispatch the single-mode instance parser by format.
+# Parameters: path: input/output path; file_type: input format override
+# Returns: MRCPSPInstance.
 def parse_mrcpsp(path: str | Path, file_type: str | None = None) -> MRCPSPInstance:
     path = Path(path)
     kind = (file_type or path.suffix.lstrip(".")).lower()
@@ -73,6 +96,9 @@ def parse_mrcpsp(path: str | Path, file_type: str | None = None) -> MRCPSPInstan
     raise ValueError(f"Unsupported RCPSP format '{kind}'. Expected .RCP or .sm.")
 
 
+# Parse a Patterson-format instance.
+# Parameters: path: input/output path
+# Returns: MRCPSPInstance.
 def parse_mrcpsp_from_rcp(path: str | Path) -> MRCPSPInstance:
     path = Path(path)
     with path.open("r", encoding="utf-8", errors="ignore") as stream:
@@ -120,6 +146,9 @@ def parse_mrcpsp_from_rcp(path: str | Path) -> MRCPSPInstance:
     return instance
 
 
+# Read until a required input section is found.
+# Parameters: stream: input stream; needle: required text marker; path: input/output path
+# Returns: str.
 def _read_until(stream, needle: str, path: Path) -> str:
     while True:
         line = stream.readline()
@@ -129,6 +158,9 @@ def _read_until(stream, needle: str, path: Path) -> str:
             return line
 
 
+# Parse the PSPLIB single-mode .sm format used by the source project.
+# Parameters: path: input/output path
+# Returns: MRCPSPInstance.
 def parse_mrcpsp_from_sm(path: str | Path) -> MRCPSPInstance:
     """Parse the PSPLIB single-mode ``.sm`` format used by the source project."""
 
@@ -215,6 +247,9 @@ def parse_mrcpsp_from_sm(path: str | Path) -> MRCPSPInstance:
     return instance
 
 
+# Extract activity features and resource capacities.
+# Parameters: instance: parsed RCPSP instance
+# Returns: activity feature dictionary and capacities.
 def build_activity_resource_data(instance: MRCPSPInstance) -> tuple[dict, List[int]]:
     resource_levels = [int(value) for value in instance.capacities]
     nodes = list(range(instance.n_activities))
@@ -230,6 +265,9 @@ def build_activity_resource_data(instance: MRCPSPInstance) -> tuple[dict, List[i
     return result, resource_levels
 
 
+# Build the duration-weighted precedence matrix.
+# Parameters: instance: parsed RCPSP instance; inf: unreachable-distance sentinel
+# Returns: List[List[int]].
 def create_distance_matrix(
     instance: MRCPSPInstance,
     inf: int = INF,

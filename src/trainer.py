@@ -24,6 +24,9 @@ from .model import RcpspGNN
 from .instance_evaluation import load_instance_splits, evaluate_instances, final_instance_evaluation
 
 
+# Load YAML settings and resolve project-relative paths.
+# Parameters: path: input/output path
+# Returns: dict.
 def load_config(path: str | Path) -> dict:
     with Path(path).open("r", encoding="utf-8") as stream:
         config = yaml.safe_load(stream)
@@ -32,6 +35,9 @@ def load_config(path: str | Path) -> dict:
     return config
 
 
+# Seed Python, NumPy and PyTorch random generators.
+# Parameters: seed: random seed
+# Returns: None; updates state or writes output.
 def set_seed(seed: int) -> None:
     random.seed(seed)
     np.random.seed(seed)
@@ -40,6 +46,9 @@ def set_seed(seed: int) -> None:
         torch.cuda.manual_seed_all(seed)
 
 
+# Select CPU or CUDA from the requested setting.
+# Parameters: requested: requested device name
+# Returns: torch.device.
 def resolve_device(requested: str) -> torch.device:
     requested = requested.lower()
     if requested == "auto":
@@ -50,6 +59,10 @@ def resolve_device(requested: str) -> torch.device:
     return device
 
 
+# Build a graph loader with the epoch and variant policy.
+# Parameters: config: project settings; split: dataset split name; repeat: repeat dataset stream
+#   epoch: epoch index; deterministic: disable evaluation shuffling; variant_policy: augmentation filter
+# Returns: DataLoader.
 def make_loader(
     config: Mapping,
     split: str,
@@ -112,6 +125,9 @@ def make_loader(
     return DataLoader(**kwargs)
 
 
+# Construct the configured priority network.
+# Parameters: config: project settings
+# Returns: RcpspGNN.
 def build_model(config: Mapping) -> RcpspGNN:
     model_config = config["model"]
     return RcpspGNN(
@@ -122,6 +138,11 @@ def build_model(config: Mapping) -> RcpspGNN:
     )
 
 
+# Set learning rate from the number of processed graphs.
+# Parameters: optimizer: training optimizer; initial_lr: initial learning rate
+#   decay_rate: learning-rate decay factor; decay_steps_graphs: graphs per decay interval
+#   graphs_seen: processed graph count
+# Returns: float.
 def set_exponential_lr(
     optimizer: torch.optim.Optimizer,
     *,
@@ -138,6 +159,9 @@ def set_exponential_lr(
     return learning_rate
 
 
+# Extract configured loss coefficients.
+# Parameters: config: project settings
+# Returns: Dict[str, float].
 def _loss_kwargs(config: Mapping) -> Dict[str, float]:
     loss_config = config["loss"]
     return {
@@ -147,11 +171,18 @@ def _loss_kwargs(config: Mapping) -> Dict[str, float]:
     }
 
 
+# Extract Border labels, segment offsets and graph membership.
+# Parameters: batch: batched graphs
+# Returns: labels, Border offsets, graph indices and graph count.
 def _batch_targets(batch: HeteroData) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, int]:
     border = batch["border"]
     return border.y, border.batch, border.ptr, batch_graph_count(batch)
 
 
+# Evaluate graph-level loss and selection metrics.
+# Parameters: model: priority network; loader: graph data loader; device: compute device
+#   config: project settings; max_graphs: evaluation graph limit
+# Returns: Dict[str, float].
 def evaluate(
     model: nn.Module,
     loader: DataLoader,
@@ -204,6 +235,10 @@ def evaluate(
     return result
 
 
+# Compute performance and detailed diagnostics in one dataset pass.
+# Parameters: model: priority network; loader: graph data loader; device: compute device
+#   config: project settings
+# Returns: compact metrics and full diagnostics.
 def evaluate_final_dataset(
     model: nn.Module,
     loader: DataLoader,
@@ -259,6 +294,10 @@ def evaluate_final_dataset(
     return performance, selection_accumulator.compute()
 
 
+# Recompute and write both fixed five-set final evaluation tables.
+# Parameters: model: priority network; config: project settings; device: compute device
+#   output_dir: output directory
+# Returns: diagnostics for the five evaluation datasets.
 def generate_final_selection_diagnostics(
     model: nn.Module,
     config: Mapping,
@@ -318,6 +357,9 @@ def generate_final_selection_diagnostics(
     return diagnostics
 
 
+# Append an epoch record to training history.
+# Parameters: path: input/output path; row: history record
+# Returns: None; updates state or writes output.
 def _append_history(path: Path, row: Mapping[str, object]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     exists = path.exists()
@@ -328,6 +370,9 @@ def _append_history(path: Path, row: Mapping[str, object]) -> None:
         writer.writerow(row)
 
 
+# Train and select weights by mean validation rollout makespan.
+# Parameters: config_path: YAML settings path; resume: optional resume checkpoint
+# Returns: None; updates state or writes output.
 def train(config_path: str | Path, resume: str | Path | None = None) -> None:
     config_path = Path(config_path).resolve()
     config = load_config(config_path)
@@ -592,6 +637,9 @@ def train(config_path: str | Path, resume: str | Path | None = None) -> None:
         print('Final RCPSP evaluation:', summary)
 
 
+# Run training from command-line arguments.
+# Parameters: none.
+# Returns: None; updates state or writes output.
 def main() -> None:
     import argparse
 

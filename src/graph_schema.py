@@ -13,6 +13,9 @@ LEGACY_FEATURE_ALIASES = {
 }
 
 
+# Translate feature keys without changing values, topology, or the input graph.
+# Parameters: graph: node-link graph
+# Returns: dict.
 def canonicalize_graph_features(graph: Mapping) -> dict:
     """Translate feature keys without changing values, topology, or the input graph.
 

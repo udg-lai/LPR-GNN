@@ -4,6 +4,9 @@ import csv
 import math
 
 
+# Plot loss, selection metrics, validation makespan and epoch times.
+# Parameters: history_path: training history CSV; output_path: optional output destination
+# Returns: Matplotlib figure, or None for empty history.
 def plot_training_history(history_path, output_path=None):
     import matplotlib.pyplot as plt
     path = Path(history_path)
@@ -11,6 +14,9 @@ def plot_training_history(history_path, output_path=None):
         return None
     with path.open(encoding='utf-8', newline='') as stream:
         rows = list(csv.DictReader(stream))
+    # Read a numeric history value, or NaN when unavailable.
+    # Parameters: row: history record; key: metric key
+    # Returns: numeric value or NaN.
     def value(row, key):
         try:
             return float(row.get(key, ''))
@@ -23,6 +29,10 @@ def plot_training_history(history_path, output_path=None):
     epochs = [value(r, 'epoch') for r in rows]
     fig, axes = plt.subplots(2, 2, figsize=(12, 8), constrained_layout=True)
     fig.suptitle('Training evolution', fontsize=15)
+    # Draw an available metric across epochs.
+    # Parameters: ax: plot axes; key: metric key; label: legend label; color: line color
+    #   divisor: plot value scale
+    # Returns: None; adds a line to the axes.
     def curve(ax, key, label, color, divisor=1):
         vals = [value(r, key)/divisor for r in rows]
         if any(math.isfinite(v) for v in vals):

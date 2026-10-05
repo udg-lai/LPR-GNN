@@ -133,6 +133,9 @@ DATASET_SUFFIXES = (".json", ".tar.gz")
 VARIANT_POLICIES = ("all", "original")
 
 
+# Convert a node identifier to a hashable value.
+# Parameters: value: input value
+# Returns: hashable node identifier.
 def _hashable_node_id(value):
     if isinstance(value, list):
         return tuple(_hashable_node_id(v) for v in value)
@@ -141,12 +144,18 @@ def _hashable_node_id(value):
     return value
 
 
+# Convert a scalar or sequence to floating-point features.
+# Parameters: value: input value
+# Returns: List[float].
 def _as_float_vector(value) -> List[float]:
     if isinstance(value, (list, tuple)):
         return [float(v) for v in value]
     return [float(value)]
 
 
+# Read a legacy proximity weight.
+# Parameters: edge: edge attributes
+# Returns: float.
 def _legacy_proximity_weight(edge: Mapping) -> float:
     weight = float(edge.get("proximity_weight", 1.0))
     if not math.isfinite(weight) or weight < 0.0:
@@ -154,6 +163,9 @@ def _legacy_proximity_weight(edge: Mapping) -> float:
     return weight
 
 
+# Read the legacy temporal edge feature.
+# Parameters: edge: edge attributes
+# Returns: float.
 def _legacy_delta_feature(edge: Mapping) -> float:
     delta_name = "delta_task_relation_border"
     if delta_name not in edge:
@@ -164,6 +176,9 @@ def _legacy_delta_feature(edge: Mapping) -> float:
     return delta
 
 
+# Extract and validate the fixed-width attributes of one typed edge.
+# Parameters: edge: edge attributes; edge_type: typed relation
+# Returns: List[float].
 def _relation_edge_features(edge: Mapping, edge_type: EdgeType) -> List[float]:
     """Extract and validate the fixed-width attributes of one typed edge."""
     if edge_type not in EDGE_FEATURES:
@@ -191,6 +206,9 @@ def _relation_edge_features(edge: Mapping, edge_type: EdgeType) -> List[float]:
     return row
 
 
+# Convert an RCPSP node-link graph into HeteroData.
+# Parameters: raw: node-link graph data
+# Returns: HeteroData.
 def parse_rcpsp_graph(raw: Mapping) -> HeteroData:
     """Convert an RCPSP node-link graph into ``HeteroData``.
 
@@ -347,6 +365,9 @@ def parse_rcpsp_graph(raw: Mapping) -> HeteroData:
     return data
 
 
+# Read the first non-whitespace byte.
+# Parameters: stream: input stream
+# Returns: bytes.
 def _first_non_whitespace(stream: BinaryIO) -> bytes:
     position = stream.tell()
     first = b""
@@ -359,6 +380,9 @@ def _first_non_whitespace(stream: BinaryIO) -> bytes:
     return first
 
 
+# Stream graph dictionaries from JSON input.
+# Parameters: stream: input stream
+# Returns: Iterator[Mapping] (streamed items).
 def _iter_graph_dicts(stream: BinaryIO) -> Iterator[Mapping]:
     first = _first_non_whitespace(stream)
     if first == b"[":
@@ -380,6 +404,9 @@ def _iter_graph_dicts(stream: BinaryIO) -> Iterator[Mapping]:
         raise ValueError("JSON dataset must start with '[' or '{'.")
 
 
+# Stream graphs from a JSON or compressed archive.
+# Parameters: path: input/output path
+# Returns: Iterator[Mapping] (streamed items).
 def iter_graphs_from_file(path: Path) -> Iterator[Mapping]:
     name = path.name.lower()
     if name.endswith(".json"):
@@ -405,6 +432,9 @@ def iter_graphs_from_file(path: Path) -> Iterator[Mapping]:
     raise ValueError(f"Unsupported dataset file: {path}")
 
 
+# Return the supported dataset files directly inside directory.
+# Parameters: directory: dataset directory
+# Returns: List[Path].
 def find_dataset_files(directory: str | Path) -> List[Path]:
     """Return the supported dataset files directly inside ``directory``."""
 
@@ -418,6 +448,9 @@ def find_dataset_files(directory: str | Path) -> List[Path]:
     )
 
 
+# Shuffle a graph stream with bounded memory.
+# Parameters: items: graph stream; buffer_size: shuffle buffer size; rng: random generator
+# Returns: Iterator[HeteroData] (streamed items).
 def _buffer_shuffle(
     items: Iterable[HeteroData], buffer_size: int, rng: random.Random
 ) -> Iterator[HeteroData]:
@@ -438,6 +471,10 @@ def _buffer_shuffle(
     yield from buffer
 
 
+# Return whether a graph is the unaugmented member of its variant group.
+# Parameters: raw_graph: unparsed graph; graph_index: graph segment indices
+#   legacy_variant_group_size: legacy variants per state
+# Returns: bool.
 def _is_original_variant(
     raw_graph: Mapping, graph_index: int, legacy_variant_group_size: int
 ) -> bool:
@@ -460,6 +497,11 @@ def _is_original_variant(
 class RcpspGraphDataset(IterableDataset):
     """Streaming dataset with deterministic optional augmentation filtering."""
 
+    # Initialize RcpspGraphDataset.
+    # Parameters: directory: dataset directory; repeat: repeat dataset stream
+    #   shuffle_files: shuffle input files; shuffle_buffer: graph shuffle buffer size; seed: random seed
+    #   variant_policy: augmentation filter; legacy_variant_group_size: legacy variants per state
+    # Returns: None; updates state or writes output.
     def __init__(
         self,
         directory: str | Path,
@@ -493,6 +535,9 @@ class RcpspGraphDataset(IterableDataset):
                 f"No .json or .tar.gz files found directly in {self.directory}"
             )
 
+    # Assign disjoint input files to the current loader worker.
+    # Parameters: none (uses instance/enclosing state).
+    # Returns: worker file paths and worker ID.
     def _worker_files(self) -> Tuple[List[Path], int]:
         worker = get_worker_info()
         if worker is None:
@@ -500,6 +545,9 @@ class RcpspGraphDataset(IterableDataset):
         files = list(self.files)[worker.id :: worker.num_workers]
         return files, worker.id
 
+    # Stream filtered, optionally shuffled graph variants.
+    # Parameters: none (uses instance/enclosing state).
+    # Returns: Iterator[HeteroData] (streamed items).
     def __iter__(self) -> Iterator[HeteroData]:
         files, worker_id = self._worker_files()
         if not files:
@@ -512,6 +560,9 @@ class RcpspGraphDataset(IterableDataset):
             if self.shuffle_files:
                 rng.shuffle(cycle_files)
 
+            # Parse the graph variants assigned to this worker.
+            # Parameters: none (uses instance/enclosing state).
+            # Returns: Iterator[HeteroData] (streamed items).
             def parsed_items() -> Iterator[HeteroData]:
                 for file_path in cycle_files:
                     for graph_index, raw_graph in enumerate(
@@ -535,6 +586,9 @@ class RcpspGraphDataset(IterableDataset):
             cycle += 1
 
 
+# Recover the original border node IDs from a single graph or batch.
+# Parameters: batch: batched graphs
+# Returns: original Border IDs for each graph.
 def border_metadata(batch: HeteroData) -> List[List[object]]:
     """Recover the original border node IDs from a single graph or batch."""
     raw = batch.border_node_ids_json
@@ -542,6 +596,9 @@ def border_metadata(batch: HeteroData) -> List[List[object]]:
     return [json.loads(value) for value in values]
 
 
+# Return the number of graphs in a HeteroData or PyG Batch.
+# Parameters: batch: batched graphs
+# Returns: int.
 def batch_graph_count(batch: HeteroData) -> int:
     """Return the number of graphs in a ``HeteroData`` or PyG ``Batch``.
 

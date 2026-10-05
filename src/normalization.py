@@ -12,6 +12,9 @@ DEFAULT_RESOURCE_CLIP = True
 _PROXIMITY_EPS = 1e-8
 
 
+# Compress a non-negative temporal quantity without clipping.
+# Parameters: value: input value; reference: fixed temporal scale
+# Returns: float.
 def _temporal_log_scale(value: object, reference: float) -> float:
     """Compress a non-negative temporal quantity without clipping.
 
@@ -29,6 +32,9 @@ def _temporal_log_scale(value: object, reference: float) -> float:
     return math.log1p(value) / math.log1p(reference)
 
 
+# Normalize resource quantities by the capacity of the current instance.
+# Parameters: values: input quantities; capacities: resource capacities; clip: clip resource ratios
+# Returns: list[float].
 def _resource_ratio_vector(
     values: Sequence[object],
     capacities: Sequence[object],
@@ -61,6 +67,9 @@ def _resource_ratio_vector(
     return normalized
 
 
+# Read resource capacities from graph metadata.
+# Parameters: graph: node-link graph
+# Returns: list[float].
 def _resource_capacities(graph: Mapping) -> list[float]:
     metadata = graph.get("graph", {})
     if not isinstance(metadata, Mapping):
@@ -74,10 +83,16 @@ def _resource_capacities(graph: Mapping) -> list[float]:
     return [float(value) for value in capacities]
 
 
+# Recognize a resource-vector feature.
+# Parameters: field: feature name
+# Returns: bool.
 def _is_resource_vector(field: str) -> bool:
     return "resource" in field.lower()
 
 
+# Add inverse-distance weights normalized independently for each Border.
+# Parameters: edges: graph edges
+# Returns: None; updates state or writes output.
 def _add_local_proximity_weights(edges: list[dict]) -> None:
     """Add inverse-distance weights normalized independently for each Border.
 
@@ -105,6 +120,10 @@ def _add_local_proximity_weights(edges: list[dict]) -> None:
             edge["proximity_weight"] = inverse / total
 
 
+# Normalize one dynamic graph for both training and inference.
+# Parameters: graph: node-link graph; temporal_reference: fixed temporal normalization scale
+#   resource_clip: clip normalized resource ratios
+# Returns: dict.
 def normalize_graph(
     graph: Mapping,
     *,
@@ -167,6 +186,10 @@ def normalize_graph(
 class GraphNormalizer:
     """Reusable transform shared by graph generation and makespan rollout."""
 
+    # Initialize GraphNormalizer.
+    # Parameters: temporal_reference: fixed temporal normalization scale
+    #   resource_clip: clip normalized resource ratios
+    # Returns: None; updates state or writes output.
     def __init__(
         self,
         *,
@@ -179,6 +202,9 @@ class GraphNormalizer:
         self.temporal_reference = temporal_reference
         self.resource_clip = bool(resource_clip)
 
+    # Normalize one graph with the configured scales.
+    # Parameters: graph: node-link graph
+    # Returns: dict.
     def __call__(self, graph: Mapping) -> dict:
         return normalize_graph(
             graph,
