@@ -130,7 +130,7 @@ FEATURE_WIDTHS: Mapping[str, int] = {
 }
 LABEL_NAME = "solution"
 DATASET_SUFFIXES = (".json", ".tar.gz")
-VARIANT_POLICIES = ("all", "original")
+VARIANT_POLICIES = ("all", "original", "no_resource_permutation")
 
 
 # Convert a node identifier to a hashable value.
@@ -494,6 +494,21 @@ def _is_original_variant(
     return graph_index % legacy_variant_group_size == 0
 
 
+def _is_resource_permuted_variant(raw_graph, graph_index, legacy_variant_group_size):
+    """Identify redundant variants, including archived untagged triplets."""
+    metadata = raw_graph.get("graph", {})
+    if isinstance(metadata, Mapping):
+        variant = metadata.get("augmentation_variant")
+        if variant is not None:
+            variant = str(variant).strip().lower()
+            if variant not in {"original", "resource_permuted", "duration_scaled"}:
+                raise ValueError(f"Unknown augmentation variant: {variant!r}")
+            return variant == "resource_permuted"
+    if legacy_variant_group_size != 3:
+        raise ValueError("Untagged augmentation filtering requires archived triplets.")
+    return graph_index % 3 == 1
+
+
 class RcpspGraphDataset(IterableDataset):
     """Streaming dataset with deterministic optional augmentation filtering."""
 
@@ -572,6 +587,10 @@ class RcpspGraphDataset(IterableDataset):
                             raw_graph,
                             graph_index,
                             self.legacy_variant_group_size,
+                        ):
+                            continue
+                        if self.variant_policy == "no_resource_permutation" and _is_resource_permuted_variant(
+                            raw_graph, graph_index, self.legacy_variant_group_size
                         ):
                             continue
                         yield parse_rcpsp_graph(raw_graph)
