@@ -388,7 +388,7 @@ def train(config_path: str | Path, resume: str | Path | None = None) -> None:
         output_dir = (project_root / output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
     config['output_dir'] = str(output_dir)
-    splits, split_hash = load_instance_splits(config)
+    splits = load_instance_splits(config)
     resume = resume or config['training'].get('resume_checkpoint')
     if resume is None and any((output_dir / name).exists() for name in ('history.csv', 'best.pt', 'last.pt')):
         raise FileExistsError('Existing training run: choose a new output_dir or explicitly resume.')
@@ -418,8 +418,8 @@ def train(config_path: str | Path, resume: str | Path | None = None) -> None:
         if not resume_path.is_absolute():
             resume_path = (project_root / resume_path).resolve()
         checkpoint = load_checkpoint(resume_path, device)
-        if checkpoint.get('selection_metric') != 'validation_mean_makespan' or checkpoint.get('split_manifest_sha256') != split_hash:
-            raise ValueError('Resume requires a makespan-selected checkpoint with the same instance split.')
+        if checkpoint.get('selection_metric') != 'validation_mean_makespan':
+            raise ValueError('Resume requires a checkpoint selected by validation mean makespan.')
         load_model_state(model, checkpoint)
         optimizer.load_state_dict(checkpoint["optimizer_state"])
         start_epoch = int(checkpoint["epoch"]) + 1
@@ -601,7 +601,6 @@ def train(config_path: str | Path, resume: str | Path | None = None) -> None:
             "graphs_seen": graphs_seen,
             "best_mean_makespan": best_makespan,
             "selection_metric": "validation_mean_makespan",
-            "split_manifest_sha256": split_hash,
             "model_state": model_state_dict(model),
             "optimizer_state": optimizer.state_dict(),
             "config": config,

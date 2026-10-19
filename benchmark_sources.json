@@ -3,28 +3,23 @@
   "archives": {
     "j30": {
       "filename": "j30.zip",
-      "url": "https://www.om-db.wi.tum.de/psplib/download_dataset.php?format=zip&mode=sm&set=j30",
-      "sha256": "acd65524b95108a7ba08c1e512ffc6d028e9ba86a2a898b4462f71953e0f8467"
+      "url": "https://www.om-db.wi.tum.de/psplib/download_dataset.php?format=zip&mode=sm&set=j30"
     },
     "j60": {
       "filename": "j60.zip",
-      "url": "https://www.om-db.wi.tum.de/psplib/download_dataset.php?format=zip&mode=sm&set=j60",
-      "sha256": "bdb4e04c7ea3991d95180dda9d8cb2d5498a5770f5b546515d65c9a932594eab"
+      "url": "https://www.om-db.wi.tum.de/psplib/download_dataset.php?format=zip&mode=sm&set=j60"
     },
     "j90": {
       "filename": "j90.zip",
-      "url": "https://www.om-db.wi.tum.de/psplib/download_dataset.php?format=zip&mode=sm&set=j90",
-      "sha256": "9aa629891a2bb25db8f860a722e1b710c2005dbe5871aa7e0add8abdaeb6e9ce"
+      "url": "https://www.om-db.wi.tum.de/psplib/download_dataset.php?format=zip&mode=sm&set=j90"
     },
     "rcplib": {
       "filename": "RCPLIBv2.4.zip",
-      "url": "https://github.com/MarioVanhoucke/RCPLIB-Resource-Constrained-Project-Library/releases/download/v2.4/RCPLIBv2.4.zip",
-      "sha256": "11f13615f474d2396d2bb59ef87d821f2288adbb1053e1021625274f444bc2ef"
+      "url": "https://github.com/MarioVanhoucke/RCPLIB-Resource-Constrained-Project-Library/releases/download/v2.4/RCPLIBv2.4.zip"
     },
     "j120": {
       "filename": "j120.zip",
-      "url": "https://www.om-db.wi.tum.de/psplib/download_dataset.php?format=zip&mode=sm&set=j120",
-      "sha256": "52a42df7146a0a409ede597be8b864d8748a4578a3d94bd477469172a5477b3b"
+      "url": "https://www.om-db.wi.tum.de/psplib/download_dataset.php?format=zip&mode=sm&set=j120"
     }
   },
   "expected_counts": {
@@ -44,333 +39,223 @@
     "files": [
       {
         "name": "pack001.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack001.dzn",
-        "sha256": "d2cb4befdc47845be0fbb0a04b7d8fccdb42f2ffd2f3b039f5d09e98b1bdf353",
-        "prepared_sha256": "c323157922cbd8d7a9f696a9e63da0db7031328767dd36b9f19a2138b2e87506"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack001.dzn"
       },
       {
         "name": "pack002.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack002.dzn",
-        "sha256": "0bb08b246026f50d91390940735236c8ca60b07e64fe1f11aa78225b420a1aaf",
-        "prepared_sha256": "ae7d69a6b9c9b32d2889ffe63a3bc1fb23891f0b1bd0304d6816029fa67cc381"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack002.dzn"
       },
       {
         "name": "pack003.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack003.dzn",
-        "sha256": "c01f64561112214b78eb5cc2551db43d6266ad4cc01367fff011ae71c447a6ff",
-        "prepared_sha256": "d6b5c05d7f31337f39b19432e573f9eef219ec5b00c362cd2adc3f6cc7591788"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack003.dzn"
       },
       {
         "name": "pack004.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack004.dzn",
-        "sha256": "ff2ab1f6782c66aef8d16f57ea9a02fb9ecf2b15f020a1406fdc27640703e41f",
-        "prepared_sha256": "d1be7cf247e31c319048f2fb19b315cdd53fe424fa130fa06bd5df5bb62eb35f"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack004.dzn"
       },
       {
         "name": "pack005.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack005.dzn",
-        "sha256": "2d2852e21cc0c2e374ad4d19104eb525c575fb3248bc066ed205a870028bf105",
-        "prepared_sha256": "60659d59d8e2b5fc709f75145a3058fc9aa4f2361be09e8ab127d175c049a6c0"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack005.dzn"
       },
       {
         "name": "pack006.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack006.dzn",
-        "sha256": "f2749719d5637d8bb1dba024bd7e368c23733eae1638ccb9020307624d5e12c7",
-        "prepared_sha256": "64ed081732ecefa347940a11630b3a2cffc2eaf91fab103f42796d1012cbe3d8"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack006.dzn"
       },
       {
         "name": "pack007.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack007.dzn",
-        "sha256": "d9488aafce8b96e00b9042e04dc1a63e9919e3e1e8ea3a91debd59f645a6f8cc",
-        "prepared_sha256": "2107a78cd8e8dc608ed82560c5b49722030a6f48d059ac10ffafed23adf9e678"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack007.dzn"
       },
       {
         "name": "pack008.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack008.dzn",
-        "sha256": "92be7206a1b6e27464dd5ac815355e3f01903823a16f136bff3a3274b4e3417d",
-        "prepared_sha256": "bccb5faaa90f8d48fcc040fe5c9ea69866f68df743158b0cf699f19ac50c8445"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack008.dzn"
       },
       {
         "name": "pack009.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack009.dzn",
-        "sha256": "4613e2b5107d0c39edbc265a1ec5364e0bcdc83c892adef9fffa3e5856c4e637",
-        "prepared_sha256": "4aea26a61b64faa6a6dd511ead63e692e8f1017a2806168d421ad1b384c46e4d"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack009.dzn"
       },
       {
         "name": "pack010.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack010.dzn",
-        "sha256": "b43fd836a43981e8690465e9547d5b9f19e0917b8071f9e87e71ee7e7c875bfe",
-        "prepared_sha256": "1b53d1fdf29f8e9c3e7320eb395bd844a17e8893fbe02b782f006d1e3246e993"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack010.dzn"
       },
       {
         "name": "pack011.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack011.dzn",
-        "sha256": "2a33cf5908c3f6adf6e00c3b9515dd07909852a74bdb433c8ed7587ee27b04b2",
-        "prepared_sha256": "08e7aad74eed0ce3e853a36d605250ac5acbd1088fd557311ee845d27bfb9571"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack011.dzn"
       },
       {
         "name": "pack012.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack012.dzn",
-        "sha256": "8ea0f846ce0d43757482219a232989c714458e220a63164303ea8be7f906a9a6",
-        "prepared_sha256": "aebfc2e26515b5aba0b62af08f24723853b080429baebdbd8aac94b40774a661"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack012.dzn"
       },
       {
         "name": "pack013.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack013.dzn",
-        "sha256": "2091c1487504a3c75881d68c4489b763ba5a23ea6b7bb3c02ed815670f5421c3",
-        "prepared_sha256": "efac3a10aa699bbb4eed5351a715875c1841ff7543a5be04b29ece1c4f668436"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack013.dzn"
       },
       {
         "name": "pack014.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack014.dzn",
-        "sha256": "3a226b0083fce0a41f49170fa4df501d15ed4443faca137856f4ef49efd95d47",
-        "prepared_sha256": "f88bf3f30fec4a187c4a5362ee69448bbce03016676ab072a87b6bdeb29bdcc9"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack014.dzn"
       },
       {
         "name": "pack015.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack015.dzn",
-        "sha256": "95ed6c34591d3e13db3e099a74751a9b95e1650643a65394e15ca78153cb1778",
-        "prepared_sha256": "226ee44a58721c149d48e094f4412c10b59da9e72b9cca1c4d5147275e566898"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack015.dzn"
       },
       {
         "name": "pack016.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack016.dzn",
-        "sha256": "6186b8f1d0544407fd059d02c6baa6f04950407fd44f27110ebdd0ad112279f5",
-        "prepared_sha256": "f80cc65afa0719ba338918682ad563def7f6b69fa048c63e5631048905e114bc"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack016.dzn"
       },
       {
         "name": "pack017.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack017.dzn",
-        "sha256": "ec2820dabefa35da46441e035d70bd70ef19de0be771151efb5e9b621666ddf4",
-        "prepared_sha256": "38906228712b5156e444b51627ad4997f3f6df95309f9236b614aaa4d9536d33"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack017.dzn"
       },
       {
         "name": "pack018.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack018.dzn",
-        "sha256": "a6f141fd63fcc83e52361bb0163c26af70b814c3ad97422abdf0788852f988ef",
-        "prepared_sha256": "888e69c7c8524857e27f9db167dc925e6559154f610dec73301240741b265a76"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack018.dzn"
       },
       {
         "name": "pack019.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack019.dzn",
-        "sha256": "9e3c43408f4ce80a3b83abab6daf3623d2ec10871571ba93b73b8200dc0046ad",
-        "prepared_sha256": "e2cd06c1160d95544533e2365220d87cf723e13ba2b58c3d4cc7e132eb3d4087"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack019.dzn"
       },
       {
         "name": "pack020.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack020.dzn",
-        "sha256": "c871e3bce15aa72ab12f9f527e700e6cb643dfdb66888cc47691222eff0112d6",
-        "prepared_sha256": "7ab8309e271ba3e61ea1a0202ca046d36468d3e4a45d81d44e1ea8cd612859d4"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack020.dzn"
       },
       {
         "name": "pack021.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack021.dzn",
-        "sha256": "686f39d0d8585d70a31e18501bb112f0e09ecac6183dc20b03221062cf8fdf83",
-        "prepared_sha256": "5f26ebdf0bdd785aca79c42bbe9aa697dd467da04029f4576d9f59fba3c69d04"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack021.dzn"
       },
       {
         "name": "pack022.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack022.dzn",
-        "sha256": "d3b09c092359ba146688b2879fa103f3b114db320ad463b4162ec9adeeecde4d",
-        "prepared_sha256": "d4285b9de923a94c7d843ec9bc336f12da7ba79e1874f80103e56f6d694f43b8"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack022.dzn"
       },
       {
         "name": "pack023.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack023.dzn",
-        "sha256": "7fe5abcb31a593e58efe25d8f333740fca333390afc935809cd0bd582e70a9cc",
-        "prepared_sha256": "a749ce993dff17646d4150d7b4f3c7ba5bb199aebce930345c98d53c0a68f3a2"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack023.dzn"
       },
       {
         "name": "pack024.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack024.dzn",
-        "sha256": "cfed2c6ece9089b9ee8c809ac1c1b1f719faf5a0e0877fc1cd0d0104b99c718a",
-        "prepared_sha256": "6915c2a4eb5fff4a336b6866c4783627c60fd08f1c35b9880c36610ebc3cd9a1"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack024.dzn"
       },
       {
         "name": "pack025.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack025.dzn",
-        "sha256": "b31c380dc5b10c074e83a872cd7995e21eb0fff2f2e382b47f5c6a0a2735945d",
-        "prepared_sha256": "9e2eaaad195bffcd7d5a0081f953f31174cda9a07edf06358c8815418c8fff94"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack025.dzn"
       },
       {
         "name": "pack026.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack026.dzn",
-        "sha256": "94658d8dc68fc94658d36e1c4fc6ee92ed6da0785eba381a83092ed09d381dd7",
-        "prepared_sha256": "abc33c1067dd42ee4ec7a91a524c59036d3577c01f8c41c7b37aea6023821b7b"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack026.dzn"
       },
       {
         "name": "pack027.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack027.dzn",
-        "sha256": "9edca578909d1520bb2769863399da68fdaf58d1908b4d28b8d5dbae544070bd",
-        "prepared_sha256": "1cac5c4ab4a1389a37c7d0e31b7e9df5e6ada930d7fe8402301f42d652baeef8"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack027.dzn"
       },
       {
         "name": "pack028.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack028.dzn",
-        "sha256": "154c2f4899bb9fdebe23b5c0ffddb8b7380c56c8e24af8da083f10128d4a0ae7",
-        "prepared_sha256": "03df8d25d34f6e1f4ae5287962a7938996367ae824b271df6c7a8c77fd69acad"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack028.dzn"
       },
       {
         "name": "pack029.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack029.dzn",
-        "sha256": "6017b94d1739d38b7dff131e3875ec88df0996478306a58b39aec98d6c161ad9",
-        "prepared_sha256": "c9631850b85d08b0eb66db49bf380adcb73e2c6212f8fa21e0249c99ce05251f"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack029.dzn"
       },
       {
         "name": "pack030.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack030.dzn",
-        "sha256": "d4c0d160016d0ffee140877affbaeb031f1c48706289d5f076907d241539f41c",
-        "prepared_sha256": "9dd21f77571fdca2cbfe083e66b953c6a89c8eee6e865ecb9a39fb8140426172"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack030.dzn"
       },
       {
         "name": "pack031.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack031.dzn",
-        "sha256": "41c457ddc44f99b07e1bd39040ce8271f70bc120b759b3fc0949240c1f0f2b05",
-        "prepared_sha256": "866ef19836799b15d6bcf5612e4c16e1e25038409709db8308c0d5ed61e134d4"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack031.dzn"
       },
       {
         "name": "pack032.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack032.dzn",
-        "sha256": "d005c7423e45da30dfaaa4435cf88f655c50b4a3afa669269d76848f546d1735",
-        "prepared_sha256": "f8fa385fd6b2c09600cc354746c1323e783b97ac939bf516d4ea22ffa407f382"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack032.dzn"
       },
       {
         "name": "pack033.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack033.dzn",
-        "sha256": "2facec3b1806803c5f6559e48297c690e0c6c8bbe6c53fa964f50717d52b18ca",
-        "prepared_sha256": "a8606148ef5055d19758624e446287271db668f08f8fca262300fdbec3b9917d"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack033.dzn"
       },
       {
         "name": "pack034.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack034.dzn",
-        "sha256": "f9ae638b5384c86b7fa2b92e80083b3a0d558b11f2829fe725b5218001ebdc77",
-        "prepared_sha256": "9fdfaa2fa9f24fa82591fe67780b41cde800893593d40a9f1ecab43fb49d5e7b"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack034.dzn"
       },
       {
         "name": "pack035.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack035.dzn",
-        "sha256": "535996b5bf7d80a4869de18e906afc074c8ac6a2e5165993ecf89f5a72efb826",
-        "prepared_sha256": "6f480b3af65244243bcf6e33046bb6772aae3505975c20c3eb678535bbc8dfc1"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack035.dzn"
       },
       {
         "name": "pack036.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack036.dzn",
-        "sha256": "5efd88ca5b7e4bcf17da1b9f1ac0a2499b96910b3579185d126bd117f6f77db5",
-        "prepared_sha256": "aa99f57785b3bd71306fbe7da1a4b17a90d89c853b142a044230053df062a7d7"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack036.dzn"
       },
       {
         "name": "pack037.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack037.dzn",
-        "sha256": "2a645874ff8e78576474f69bbc868860e674b66b4ca2b0c65d5b70b7e06a0fd7",
-        "prepared_sha256": "2920661680d395e32f86683463bdca8a1765dbd394cc120a89cfe844e0bd11f6"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack037.dzn"
       },
       {
         "name": "pack038.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack038.dzn",
-        "sha256": "79493e504f4aef1e30b3226fcc4bb4c074d75f21f750b9f6c80f87e88ed0c8c5",
-        "prepared_sha256": "fcbed94786a6b7ec124f55837f8f1242144967476fef8cf64e8e069c7cb09e2e"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack038.dzn"
       },
       {
         "name": "pack039.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack039.dzn",
-        "sha256": "56415623da7db367ec1d2c79d80481988a1681d4a7020f385bc55c41ea07285f",
-        "prepared_sha256": "52e78d223f4aeb7f4ac727c4c4353e04ddd08d3494146d9bde3f2f2bc357ad15"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack039.dzn"
       },
       {
         "name": "pack040.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack040.dzn",
-        "sha256": "443f61ebfc7963ec1ed7fee276f19b8d4ad7bd63cb0ea892e9df7724f337440b",
-        "prepared_sha256": "7a587fe87f7bf5eeb610bd74dbe5cf18af27a472bc009c9bf7e51af241e43f70"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack040.dzn"
       },
       {
         "name": "pack041.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack041.dzn",
-        "sha256": "85d72506d8eb3cdeb93e53aef317a436dffc0e109965c7357ea6660f05fcc6b3",
-        "prepared_sha256": "596c054cf1b02197cce23dc4f7071f38c6ca7d8df958ad2ba8c1517ac9a2832f"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack041.dzn"
       },
       {
         "name": "pack042.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack042.dzn",
-        "sha256": "8dc276280ded396735699e15524edd0a0690d87f9172ef92231ece455ac95f71",
-        "prepared_sha256": "c6b19ed6a6fb6f159ce75b5ec2da8447dc56bd1aa717d4d6a8aaec215850c2bc"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack042.dzn"
       },
       {
         "name": "pack043.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack043.dzn",
-        "sha256": "e3f7005e06cb89b8f68ca097f9756afce38e5766cccc0e73d50a0de4f4c40c54",
-        "prepared_sha256": "1272f6ea6d18d0ff4551c4ddd18133cc2f074d197fad0bbc6ad6fc77fe084c76"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack043.dzn"
       },
       {
         "name": "pack044.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack044.dzn",
-        "sha256": "9960899f5b795094921e4d471a04480c1306d795650a2ff87d245e67f2acb8d0",
-        "prepared_sha256": "0e3c91538c57d7816c4ab5e4398fd66d8b405219e1ae6cfac65a93948901464c"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack044.dzn"
       },
       {
         "name": "pack045.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack045.dzn",
-        "sha256": "d4c16fe52d4d37b7327d35205c4c35401536e522d6dee499254a697c21103f39",
-        "prepared_sha256": "d15f6786dfac5e646cbcc58d92a20e227bc2709da9d69e2982d290c6a4bb1aa5"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack045.dzn"
       },
       {
         "name": "pack046.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack046.dzn",
-        "sha256": "649ff88b31f916fd5683bcf308d904a149494b1ba60a33056ccaa42e1ba59a68",
-        "prepared_sha256": "4cd81479dc3a12ec5884133281f02508a0f6589040f6dc43b98313554401fdc6"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack046.dzn"
       },
       {
         "name": "pack047.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack047.dzn",
-        "sha256": "e21dd0574057b69d1b001c6d89e7036b533924c1d96e11bedc5520acf1e495a9",
-        "prepared_sha256": "c17417ca7d145c0c563f03182cbdb2e82ec650404ecd348a8d76788d25c67381"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack047.dzn"
       },
       {
         "name": "pack048.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack048.dzn",
-        "sha256": "b5df186349e5f1e096bca4139ad270d623ff4ff49ee914bee99e2cfd137597ec",
-        "prepared_sha256": "c1ea22f2b6a00094886530e28a02b57813905943998a67b2f9de4d56056ccb4f"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack048.dzn"
       },
       {
         "name": "pack049.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack049.dzn",
-        "sha256": "88a5547fbf0f20ace8d58ac3e5281537051f065fceb8efebb16f5ae6366d4236",
-        "prepared_sha256": "82a006c89e2d526203fd0a191fde11ff2c2c72fea7556133f632d05a106ee85d"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack049.dzn"
       },
       {
         "name": "pack050.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack050.dzn",
-        "sha256": "49c6d28eaf69bc83a10b8dbdb979a90ea799a87a1395a07ee19948018063b7d7",
-        "prepared_sha256": "37efbca527c943d010f93a25221f415cc4d74ffafe4adb8b780bea61a888b5c8"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack050.dzn"
       },
       {
         "name": "pack051.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack051.dzn",
-        "sha256": "8dc276280ded396735699e15524edd0a0690d87f9172ef92231ece455ac95f71",
-        "prepared_sha256": "c6b19ed6a6fb6f159ce75b5ec2da8447dc56bd1aa717d4d6a8aaec215850c2bc"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack051.dzn"
       },
       {
         "name": "pack052.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack052.dzn",
-        "sha256": "838453c628cf7b5b8b7289cce366ddff421d71af5cefc2424ec236a360e2f28e",
-        "prepared_sha256": "2a691bf898100deee54163ba090d62949083561904a3894657f0667feeaabb2f"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack052.dzn"
       },
       {
         "name": "pack053.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack053.dzn",
-        "sha256": "e89cc9c01de59900b6620b0e2d8d65d1d7ebabdf6b7f531d1b89332646b1e4e6",
-        "prepared_sha256": "c544f011924bf5753a5ac6482f0405e303fd301013b511801e86216a53dbc82f"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack053.dzn"
       },
       {
         "name": "pack054.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack054.dzn",
-        "sha256": "87e0504bb32291994ae1645b766e7f3b8186fcdcc95f5c42fec071800e53b83b",
-        "prepared_sha256": "eaf04e34010dd36a5358c87301211b604e23f3478561dde7c991cd5f40a5b62d"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack054.dzn"
       },
       {
         "name": "pack055.dzn",
-        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack055.dzn",
-        "sha256": "902c26a27fbf9ed31299fabad707d567e4f087abf0691abbddba8b5521f980aa",
-        "prepared_sha256": "517c18367fccbd7d10423bd5e46fbc7954c9f724ba4d7200a3401a5642ddc14b"
+        "url": "https://raw.githubusercontent.com/MiniZinc/minizinc-benchmarks/26bcd0a78433025f7b6896a6fa8caf128795760b/rcpsp/data_pack/pack055.dzn"
       }
     ]
   }

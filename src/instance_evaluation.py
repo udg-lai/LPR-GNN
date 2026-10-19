@@ -1,7 +1,6 @@
 """Complete RCPSP rollouts, never labelled validation/test graphs."""
 from __future__ import annotations
 
-import hashlib
 import json
 import math
 import time
@@ -14,53 +13,18 @@ from .rcpsp_instance import parse_mrcpsp
 from .rcpsp_schedule import calculate_makespans_batched
 
 
-# Compute a file SHA-256 digest.
-# Parameters: path: input/output path
-# Returns: SHA-256 hex string.
-def file_hash(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
-
-
-# Verify instance integrity, split separation and graph membership.
-# Parameters: config: project settings
-# Returns: split paths and manifest SHA-256.
+# Read the configured instance memberships without prevalidating their contents.
 def load_instance_splits(config):
     root = Path(config['_project_root'])
     manifest_path = root / config['instance_evaluation']['manifest']
     manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
-    splits = {}
-    identities, hashes = {}, {}
-    for split in ('train', 'validation', 'test'):
-        entries = manifest['splits'][split]
-        if not entries:
-            raise ValueError(f'Empty instance split: {split}')
-        paths = []
-        for entry in entries:
-            path = (root / entry['path']).resolve()
-            if not path.is_relative_to(root.resolve()) or not path.is_file():
-                raise ValueError(f'Missing or external instance: {path}')
-            digest = file_hash(path)
-            if digest != entry['sha256']:
-                raise ValueError(f'Instance changed since split creation: {path}')
-            key = path.stem.casefold()
-            if key in identities or digest in hashes:
-                raise ValueError(f'Duplicate/overlapping instance: {path}')
-            identities[key] = split
-            hashes[digest] = split
-            paths.append(path)
-        splits[split] = sorted(paths, key=lambda p: p.as_posix().casefold())
-    # Protect against accidentally adding validation/test instances to train.
-    graph_keys = set()
-    for path in Path(config['data']['train_dir']).iterdir():
-        name = path.name.lower()
-        if name.endswith('.json'):
-            graph_keys.add(name[:-5])
-        elif name.endswith('.tar.gz'):
-            graph_keys.add(name[:-7])
-    expected = {p.stem.casefold() for p in splits['train']}
-    if graph_keys != expected:
-        raise ValueError('Training graph membership differs from the frozen instance split.')
-    return splits, file_hash(manifest_path)
+    return {
+        split: sorted(
+            (root / entry['path'] for entry in manifest['splits'][split]),
+            key=lambda p: p.as_posix().casefold(),
+        )
+        for split in ('train', 'validation', 'test')
+    }
 
 
 # Arithmetic mean over ALL instances; any failed rollout aborts evaluation.

@@ -78,15 +78,15 @@ Such a build is a platform adaptation, not the exact reference environment.
 
 First download and prepare the raw instances following [DATASETS.md](DATASETS.md).
 That guide lists the external sources, the required directories, and the frozen
-split's format, filename and SHA-256 requirements. Cloning alone does not supply
+split's format and filename conventions. Cloning alone does not supply
 the instances required for graph generation, validation or test.
 
 From the repository root, run `python prepare_instances.py` with the installed
-project environment. It downloads checksum-verified public PSPLIB and RCPLIB v2.4
-archives, converts the required Patterson inputs deterministically, validates all
-training reference schedules, and places the three fixed partitions. No local
+project environment. It downloads public PSPLIB and RCPLIB v2.4
+archives, converts the required Patterson inputs deterministically,
+and places the three fixed partitions. No local
 copies from an earlier project are required. The source recipe is
-`instance_sources.json`; prepared-file hashes are in `instance_splits.json`.
+`instance_sources.json`; partition memberships are in `instance_splits.json`.
 
 For benchmark inference, `python prepare_benchmarks.py` separately prepares
 J30, J60, J90, J120, RG30, RG300 and PACK under `rcpsp/`, using
@@ -127,10 +127,10 @@ files are preserved unless regeneration is explicitly requested. The generation 
   directly in each directory, as specified in `instance_splits.json`.
 - Keep each manifest entry's format: training/validation include both `.RCP`
   and `.sm` files; test uses `.rcp`. Do not change extensions to match a family name.
-- `instance_splits.json`: fixed memberships and SHA-256 hashes of reproducibly
+- `instance_splits.json`: fixed memberships of reproducibly
   prepared public inputs (1,106 train, 122 validation, 180 test instances).
   Do not resplit individual graphs. `instance_sources.json` pins archives, source
-  members and conversions; `prepare_instances.py` creates and verifies these inputs.
+  members and conversions; `prepare_instances.py` prepares these inputs.
 - `data/train/`: initially empty; populated by graph generation.
 - `outputs/`: created only when running the code; excluded from Git.
 

@@ -14,7 +14,7 @@ LPR-GNN base model (41,514 parameters), not to Wheatley.
   contributes one deterministic greedy rollout per instance.
 - `best.pt`: the validation-selected model's state dictionary. All weight tensors
   are unchanged. Optimizer state and machine-specific configuration are omitted.
-- `manifest.json`: source and exported-file SHA-256 hashes, record counts and
+- `manifest.json`: source filenames, record counts and
   checkpoint-selection metadata for LPR-GNN and Wheatley.
 
 The combined CSV contains 147,850 handcrafted-rule runs and 4,375 Wheatley

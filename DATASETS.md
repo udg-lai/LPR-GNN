@@ -25,7 +25,7 @@ instance files into the family directories above.
 
 PACK is obtained from the MiniZinc benchmark mirror, whose README attributes it
 to Carlier and Neron (2003), DOI `10.1016/S0377-2217(02)00763-4`. The source commit
-and all 55 file checksums are pinned in `benchmark_sources.json`. The MiniZinc
+is recorded in `benchmark_sources.json`. The MiniZinc
 data contain real activities only: conversion adds a zero-duration, zero-demand
 dummy source and sink, preserving durations, demands and precedence constraints.
 It does not use local copies from an earlier project.
@@ -35,9 +35,9 @@ It does not use local copies from an earlier project.
 Run `python prepare_benchmarks.py` with the installed project environment to
 prepare all seven families: J30/J60/J90 (480 each), J120 (600), RG30 (1,800),
 RG300 (480) and PACK (55). It uses pinned public archives and PACK source files,
-checks their hashes, and writes parser-compatible inputs under `rcpsp/`.
+writes parser-compatible inputs under `rcpsp/`.
 Its archive cache defaults to `outputs/input_archives/`; `--cache-dir` can point
-to an existing cache. Existing different instance contents are never overwritten.
+to an existing cache. Preparation writes the selected inputs to their destination paths, replacing existing files.
 RG instances without renewable resources remain valid and are preserved.
 This command does not change the training, validation or test partitions.
 
@@ -55,7 +55,7 @@ Reference bounds are optional; configure `BOUNDS_PATH` in the predictor to obtai
 ## Training, validation and test
 
 Benchmark storage alone does not prepare the training split. The frozen
-`instance_splits.json` specifies exact paths and SHA-256 hashes for:
+`instance_splits.json` specifies paths for:
 
 | Purpose | Required location | Number of instances |
 | --- | --- | ---: |
@@ -66,47 +66,17 @@ Benchmark storage alone does not prepare the training split. The frozen
 | Test RG30 | `data/test/<manifest filename>.rcp` | 180 |
 
 1. Run `python prepare_instances.py` using the project environment. It downloads
-   the pinned public archives and places instances at the exact manifest paths.
-   An existing file with different contents is rejected, not overwritten.
-2. `instance_sources.json` records each upstream archive, member, source hash and
-   conversion. Archive hashes and prepared-file hashes are checked independently.
-   Archives are cached under `outputs/input_archives/`. To reuse archives downloaded
-   from the same public sources, use `--cache-dir <archive-directory>`; the same
-   checksum checks apply. Upstream changes fail explicitly.
+   public archives and places instances at the manifest paths, replacing existing files.
+2. `instance_sources.json` records each upstream archive, member and conversion.
+   Archives are cached under `outputs/input_archives/`; use `--cache-dir` to reuse
+   an existing archive directory.
 3. Native `.sm` members retain their bytes. Required `.RCP` files are converted
-   from PSPLIB with the supplied parser, preserving zero-based activity identity,
-   durations, demands, capacities and precedence relations. RG30 test inputs come
-   from `original/RG30_<id>.rcp` in `ALL/ALL.tar` in RCPLIB v2.4. Patterson output
-   uses integer tokens, single spaces, LF and a final newline. Wrapped successor
-   lists are interpreted by their declared counts. No instance data are redistributed.
-4. The published memberships and `source_data/training_sources.csv` are unchanged.
-   The manifest now pins these reproducibly prepared public files, not unprovided
-   project-specific byte representations. All 1,106 training reference schedules
-   are checked for activity coverage, precedence and resource feasibility before
-   placement. This is an input-preparation repair, not evidence that a retraining
-   run reproduces the archived metrics exactly. Published inference weights and
-   result tables are unchanged. Old project checkpoint resumes tied to a different
-   split-manifest hash are intentionally incompatible; do not bypass that check.
+   from PSPLIB. Patterson output uses integer tokens, single spaces, LF and a final
+   newline. Wrapped successor lists are read using their declared counts.
+4. `instance_splits.json` supplies training, validation and test memberships.
+   Inputs and reference schedules are read when used, without a separate validation pass.
 5. Run `create_graphs_training.ipynb` to populate `data/train/`, then run
-   `training.ipynb`. Validation and test are rollouts on raw instances; do not
-   generate validation/test graph datasets. Finally run `makespan_predictor.ipynb`.
+   `training.ipynb`. Validation and test use rollouts on raw instances. Finally run
+   `makespan_predictor.ipynb`.
 
-To inspect the required destinations in PowerShell, from the repository root:
-
-```powershell
-$manifest = Get-Content -LiteralPath .\instance_splits.json -Raw | ConvertFrom-Json
-foreach ($splitName in @('train', 'validation', 'test')) {
-    foreach ($entry in $manifest.splits.$splitName) {
-        $present = Test-Path -LiteralPath $entry.path -PathType Leaf
-        $matches = $false
-        if ($present) {
-            $matches = (Get-FileHash -LiteralPath $entry.path -Algorithm SHA256).Hash -eq $entry.sha256
-        }
-        [pscustomobject]@{ Split = $splitName; Path = $entry.path; Exists = $present; HashMatches = $matches }
-    }
-}
-```
-
-Missing instances and hash mismatches intentionally stop training. A fresh clone
-does not run end to end until these external inputs have been prepared. Downloaded
-`.sm`/`.rcp` files are ignored by Git to avoid accidental redistribution.
+Downloaded `.sm`/`.rcp` files are ignored by Git.

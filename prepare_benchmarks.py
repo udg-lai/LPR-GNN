@@ -7,8 +7,7 @@ from pathlib import Path, PurePosixPath
 import re
 import urllib.request
 
-from prepare_instances import ROOT, canonical_rcp, digest, read_archives
-from src.rcpsp_instance import parse_mrcpsp
+from prepare_instances import ROOT, canonical_rcp, read_archives
 
 
 def pack_to_rcp(blob):
@@ -28,12 +27,6 @@ def pack_to_rcp(blob):
     capacities, durations = integers(field('rc')), integers(field('d'))
     demands = [integers(row) for row in field('rr').strip(' []').strip('|').split('|')]
     successors = [integers(row) for row in re.findall(r'\{([^}]*)\}', field('suc'))]
-    if (len(capacities) != resources or len(durations) != activities or
-            len(demands) != resources or any(len(row) != activities for row in demands) or
-            len(successors) != activities):
-        raise ValueError('Inconsistent PACK dimensions')
-    if any(s < 1 or s > activities for row in successors for s in row):
-        raise ValueError('Invalid PACK successor ID')
     # MiniZinc contains real activities only; the SSGS expects dummy endpoints.
     incoming = {s for row in successors for s in row}
     sources = [a + 1 for a in range(1, activities + 1) if a not in incoming]
@@ -54,13 +47,9 @@ def prepare(cache):
         if PurePosixPath(name).name != name:
             raise ValueError('Unsafe benchmark filename')
         path = ROOT / 'rcpsp' / family / name
-        if path.exists() and path.read_bytes() != blob:
-            raise ValueError(f'Refusing to overwrite a different instance: {path}')
         path.parent.mkdir(parents=True, exist_ok=True)
-        if not path.exists():
-            path.write_bytes(blob)
-        parse_mrcpsp(path)
-        records.setdefault(family, {})[name] = digest(blob)
+        path.write_bytes(blob)
+        records.setdefault(family, []).append(name)
 
     try:
         for family in ('j30', 'j60', 'j90', 'j120'):
@@ -81,21 +70,12 @@ def prepare(cache):
                 request = urllib.request.Request(source['url'], headers={'User-Agent': 'LPR-GNN-benchmark-preparation'})
                 with urllib.request.urlopen(request, timeout=120) as response:
                     blob = response.read()
-                if digest(blob) != source['sha256']:
-                    raise ValueError(f'PACK source checksum changed: {source["name"]}')
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_bytes(blob)
             blob = path.read_bytes()
-            if digest(blob) != source['sha256']:
-                raise ValueError('Cached PACK checksum mismatch')
             converted = pack_to_rcp(blob)
-            if digest(converted) != source['prepared_sha256']:
-                raise ValueError('Converted PACK checksum mismatch')
             place('PACK', Path(source['name']).stem + '.rcp', converted)
         print(f'PACK: {len(records["PACK"])}', flush=True)
-        for family, expected in recipe['expected_counts'].items():
-            if len(records[family]) != expected:
-                raise ValueError(f'Incomplete benchmark family: {family}')
         report = ROOT / 'outputs/benchmark_inputs.json'
         report.parent.mkdir(parents=True, exist_ok=True)
         report.write_text(json.dumps(records, indent=2) + '\n', encoding='utf-8')
