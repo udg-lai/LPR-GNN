@@ -40,7 +40,7 @@ normalization:
 training:
   epochs: 24
   graphs_per_epoch: 0
-  variants: no_resource_permutation
+  variants: all
   shuffle: seed_plus_epoch
   skip_singleton_border_graphs: true
 evaluation:
@@ -71,11 +71,11 @@ project_distribution:
   third_party_data_rights: obtain_separately_and_follow_provider_terms
 
 resource_augmentation_update:
-  date: "2026-10-17"
-  training_variant_policy: no_resource_permutation
-  generated_variants: [original, duration_scaled]
+  date: "2026-10-19"
+  training_variant_policy: all
+  generated_variants: [original, resource_permuted, duration_scaled]
   archived_variant_order: [original, resource_permuted, duration_scaled]
   archived_graphs_per_epoch: 401778
-  selected_graphs_per_epoch: 267852
+  selected_graphs_per_epoch: 401778
   reported_checkpoints: trained_with_archived_three_variant_corpus
   retrained_with_reduced_corpus: false

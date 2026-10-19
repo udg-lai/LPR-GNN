@@ -51,8 +51,8 @@ data:
   shuffle_buffer: 2048
   # Supervised graph augmentation filtering; does not augment the original RCPSP validation/test rollouts.
   variants:
-    # no_resource_permutation retains original and duration-scaled graphs; all reproduces historical runs; original keeps only originals. Used by src/trainer.py: make_loader() and src/data.py: RcpspGraphDataset.
-    train: no_resource_permutation
+    # all retains original, resource-permuted and duration-scaled graphs; original keeps only originals. Used by src/trainer.py: make_loader() and src/data.py: RcpspGraphDataset.
+    train: all
     # Fallback group size for original-variant filtering when augmentation metadata is absent: original is the first graph in each group. Used by src/data.py: _is_original_variant(), via make_loader().
     legacy_group_size: 3
 # Architecture arguments passed by src/trainer.py: build_model() to src/model.py: RcpspGNN.

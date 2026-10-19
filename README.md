@@ -111,12 +111,11 @@ Configure training in `config.yaml`. Defaults preserve the base model, 12 data w
 24 epochs, all available training graphs per epoch, and no checkpoint resume.
 Adjust worker count or batch size for smaller machines. Training order is shuffled;
 validation/test use deterministic inference over raw RCPSP instances, not augmented
-validation/test graphs. Training augmentation retains the original and duration-scaled graphs, without
-resource permutations. The current selection contains 267,852 graphs (two thirds
-of the archived 401,778-graph corpus). The loader filters redundant resource
-permutations from archived triplets without rewriting the stored data. Bundled
-checkpoints and reported results were trained with the historical three-variant
-corpus; they have not been retrained with this reduced selection. The generation seed follows the YAML seed.
+validation/test graphs. Training augmentation includes resource-channel permutation and duration scaling.
+Each decision graph produces three variants: original, resource-permuted and
+duration-scaled (the two augmentations are not combined). Training uses all
+401,778 archived graphs, matching the reported base checkpoint. Existing graph
+files are preserved unless regeneration is explicitly requested. The generation seed follows the YAML seed.
 
 ## Data and split
 
