@@ -43,9 +43,9 @@ PROPAGATION_STAGES: Tuple[PropagationStage, ...] = (
 
 ENTITY_TO_INDEX = {entity: index for index, entity in enumerate(ENTITIES)}
 
-# Resource channels are anonymous: applying the same permutation to every
+# Resources are anonymous: applying the same permutation to every
 # resource vector of a graph must not change the prediction. The indices below
-# separate the four resource channels from temporal/scalar features.
+# separate the four resources from temporal/scalar features.
 NODE_RESOURCE_INDICES = {
     "border": (1, 2, 3, 4),
     "other": (1, 2, 3, 4),
@@ -117,7 +117,7 @@ class WeightedSumAggregation(MessagePassing):
 
 
 class PermutationInvariantResourceEncoder(nn.Module):
-    """DeepSets encoder for scalar features plus anonymous resource channels."""
+    """DeepSets encoder for scalar features plus anonymous resources."""
 
     # Initialize PermutationInvariantResourceEncoder.
     # Parameters: input_width: input feature width; resource_indices: resource feature positions
@@ -177,7 +177,7 @@ class PermutationInvariantResourceEncoder(nn.Module):
         if self.scalar_encoder is not None:
             nn.init.xavier_uniform_(self.scalar_encoder.weight)
 
-    # Encode node features independently of resource-channel order.
+    # Encode node features independently of resource order.
     # Parameters: features: node features
     # Returns: encoded features or aggregated messages.
     def forward(self, features: Tensor) -> Tensor:
@@ -188,7 +188,7 @@ class PermutationInvariantResourceEncoder(nn.Module):
             )
         resource_values = features.index_select(1, self.resource_indices).unsqueeze(-1)
         # Shared encoding plus symmetric aggregation makes the result exactly
-        # invariant to every permutation of the resource channels.
+        # invariant to every permutation of the resources.
         encoded = self.resource_item_encoder(resource_values).mean(dim=1)
         if self.scalar_encoder is not None:
             scalar_values = features.index_select(1, self.scalar_indices)
@@ -222,9 +222,9 @@ class PermutationInvariantResourcePairEncoder(nn.Module):
                 if layer.bias is not None:
                     nn.init.zeros_(layer.bias)
 
-    # Encode paired source and destination resource channels.
-    # Parameters: source_resources: source resource channels
-    #   destination_resources: destination resource channels
+    # Encode paired source and destination resources.
+    # Parameters: source_resources: source resources
+    #   destination_resources: destination resources
     # Returns: encoded features or aggregated messages.
     def forward(
         self,
@@ -439,11 +439,11 @@ class RcpspGNN(nn.Module):
             active.index_fill_(0, edge_graphs, True)
         return active
 
-    # Extract the resource channels of node features.
+    # Extract the resources of node features.
     # Parameters: node_type: entity type; features: node features
     # Returns: Tensor.
     @staticmethod
-    def _resource_channels(node_type: str, features: Tensor) -> Tensor:
+    def _resource_values(node_type: str, features: Tensor) -> Tensor:
         if node_type == "time-resources":
             return features[:, :4]
         if node_type in {"border", "other"}:
@@ -486,8 +486,8 @@ class RcpspGNN(nn.Module):
         source_raw = data[source_type].x.index_select(0, edge_index[0])
         destination_raw = data[destination_type].x.index_select(0, edge_index[1])
         resource_pair_features = self.resource_pair_encoder(
-            self._resource_channels(source_type, source_raw),
-            self._resource_channels(destination_type, destination_raw),
+            self._resource_values(source_type, source_raw),
+            self._resource_values(destination_type, destination_raw),
         )
         encoded_edge_features = self.relation_edge_encoders[key](edge_features)
         encoded_relation_context = encoded_edge_features + resource_pair_features

@@ -111,7 +111,7 @@ Configure training in `config.yaml`. Defaults preserve the base model, 12 data w
 24 epochs, all available training graphs per epoch, and no checkpoint resume.
 Adjust worker count or batch size for smaller machines. Training order is shuffled;
 validation/test use deterministic inference over raw RCPSP instances, not augmented
-validation/test graphs. Training augmentation includes resource-channel permutation and duration scaling.
+validation/test graphs. Training augmentation includes resource permutation and duration scaling.
 Each decision graph produces three variants: original, resource-permuted and
 duration-scaled (the two augmentations are not combined). Training uses all
 401,778 archived graphs, matching the reported base checkpoint. Existing graph

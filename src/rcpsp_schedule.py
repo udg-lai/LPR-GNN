@@ -111,7 +111,7 @@ def propagate_earliest_start_times(
 
 # Extract an activity resource-demand vector.
 # Parameters: nodes_dict: activity durations and demands; node_id: activity ID
-#   num_resources: resource channel count
+#   num_resources: resource count
 # Returns: List[int].
 def _resources_for_node(
     nodes_dict: Mapping[str, Sequence[int]],
@@ -126,7 +126,7 @@ def _resources_for_node(
 
 # Read residual capacities at one time instant.
 # Parameters: resource_time: residual resource-time profile; time_index: time instant
-#   num_resources: resource channel count
+#   num_resources: resource count
 # Returns: List[int].
 def _resources_at_time(
     resource_time: np.ndarray,
