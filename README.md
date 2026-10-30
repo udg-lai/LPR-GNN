@@ -1,5 +1,9 @@
 # LPR-GNN
 
+The canonical repository is private: [udg-lai/LPR-GNN](https://github.com/udg-lai/LPR-GNN).
+Future updates are maintained here. The original `josepsuy/LPR-GNN` repository
+is preserved unchanged.
+
 Source distribution of the shared-GRU *LPR-GNN* model: 16 message-passing
 iterations, explicit residual resource-time profiles and 41,514 trainable parameters.
 *LPR-GNN* learns activity-priority rules for the SSGS.
@@ -38,7 +42,7 @@ outputs are not bundled.
 Clone the repository using an account with access, then enter its directory:
 
 ```powershell
-git clone https://github.com/josepsuy/LPR-GNN.git
+git clone https://github.com/udg-lai/LPR-GNN.git
 cd LPR-GNN
 ```
 

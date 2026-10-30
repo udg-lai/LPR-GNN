@@ -1,4 +1,4 @@
-# Project source: https://github.com/josepsuy/LPR-GNN (currently private).
+# Project source: https://github.com/udg-lai/LPR-GNN (private).
 # Parameter reference: meaning and actual consumers in this project.
 # Paths are relative to the project root unless explicitly absolute.
 # Metadata-only fields do not switch the implemented algorithms.

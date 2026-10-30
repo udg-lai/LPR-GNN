@@ -1,7 +1,9 @@
 distribution: source_and_selected_results
 source_repository:
-  url: https://github.com/josepsuy/LPR-GNN
+  url: https://github.com/udg-lai/LPR-GNN
   visibility: private
+  copied_from: https://github.com/josepsuy/LPR-GNN
+  canonical_for_future_updates: true
   access: owner_granted
   contents: source_configuration_minimal_notebooks_split_metadata_reference_schedules_and_selected_results
   excludes: raw_instances_generated_graphs_and_unselected_runtime_outputs

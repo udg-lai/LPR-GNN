@@ -5,7 +5,7 @@ message: >-
   not an additional condition of the MIT License.
 type: software
 title: LPR-GNN
-repository-code: https://github.com/josepsuy/LPR-GNN
+repository-code: https://github.com/udg-lai/LPR-GNN
 authors:
   - family-names: Suy
     given-names: Josep
