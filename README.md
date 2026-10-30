@@ -1,8 +1,8 @@
 # LPR-GNN
 
-The canonical repository is private: [udg-lai/LPR-GNN](https://github.com/udg-lai/LPR-GNN).
-Future updates are maintained here. The original `josepsuy/LPR-GNN` repository
-is preserved unchanged.
+The public release repository is [udg-lai/LPR-GNN](https://github.com/udg-lai/LPR-GNN).
+Future updates are maintained here. The original personal repository is
+preserved unchanged.
 
 Source distribution of the shared-GRU *LPR-GNN* model: 16 message-passing
 iterations, explicit residual resource-time profiles and 41,514 trainable parameters.
