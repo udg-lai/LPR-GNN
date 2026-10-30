@@ -2,6 +2,7 @@
 
 Source distribution of the shared-GRU *LPR-GNN* model: 16 message-passing
 iterations, explicit residual resource-time profiles and 41,514 trainable parameters.
+*LPR-GNN* learns activity-priority rules for the SSGS.
 The GNN selects an eligible activity; the serial schedule generation scheme (SSGS)
 enforces precedence and resource feasibility. Forced single-activity decisions bypass
 the GNN and are excluded from the generated training graphs.
