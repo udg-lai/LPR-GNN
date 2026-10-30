@@ -1,9 +1,13 @@
 {
   "included_methods": [
     "LPR-GNN base",
-    "handcrafted priority rules",
+    "classical priority rules",
     "Wheatley"
   ],
+  "display_names": {
+    "handcrafted": "classical priority rules",
+    "wheatley": "Wheatley"
+  },
   "inference_weights_model": "LPR-GNN base",
   "model": "LPR-GNN base",
   "architecture": "shared GRU",

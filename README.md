@@ -1,6 +1,6 @@
 # LPR-GNN
 
-Source distribution of the GRU LPR-GNN base model: 16 message-passing
+Source distribution of the shared-GRU *LPR-GNN* model: 16 message-passing
 iterations, explicit residual resource-time profiles and 41,514 trainable parameters.
 The GNN selects an eligible activity; the serial schedule generation scheme (SSGS)
 enforces precedence and resource feasibility. Forced single-activity decisions bypass
@@ -24,9 +24,9 @@ The following files and directories are excluded by `.gitignore`:
 - Environment files that may contain credentials: `.env`, `.env.*`.
 - Local editor settings: `.vscode/`, `.idea/`.
 
-The `paper_results/` archive contains LPR-GNN base-model results, handcrafted
-priority-rule results and Wheatley rollouts in `other_priority_rules_results.csv`,
-plus validation-selected LPR-GNN inference weights. See
+The `paper_results/` archive contains results for *LPR-GNN* and the *classical
+priority rules*, and *Wheatley* rollouts in `other_priority_rules_results.csv`,
+plus validation-selected *LPR-GNN* inference weights. See
 [paper_results/README.md](paper_results/README.md) for methods and timing definitions.
 The checkpoint exclusion above
 has a narrow exception for `paper_results/best.pt`. Saved notebook execution
@@ -119,6 +119,13 @@ files are preserved unless regeneration is explicitly requested. The generation 
 
 ## Data and split
 
+The article compares *LPR-GNN*, 22 *classical priority rules* and *Wheatley*
+on 2,935 instances: J120 (600), RG30 (1,800), RG300 (480) and PACK (55).
+J30/J60/J90 are development families and are excluded from those benchmark
+totals. The 180 RG30 test instances are included in the full RG30 benchmark.
+The results archive preserves additional rules and repetitions; the exact
+22-rule article selection is documented in [paper_results/README.md](paper_results/README.md).
+
 - `rcpsp/`: place externally obtained benchmark instances here, grouped by family.
 - `source_data/j30/`, `source_data/j60/`, `source_data/j90/`: place only the frozen
   training instances here. The bundled `source_data/training_sources.csv` contains
@@ -164,7 +171,7 @@ Copyright (c) 2026 Josep Suy and Mateu Villaret.
 
 ## Citation
 
-If you use LPR-GNN in scientific work, please cite the associated manuscript:
+If you use *LPR-GNN* in scientific work, please cite the associated manuscript:
 
 > Josep Suy and Mateu Villaret. *Learning a State-Dependent Priority Rule for
 > Serial Schedule Generation with Graph Neural Networks*. Manuscript.

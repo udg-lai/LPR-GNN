@@ -62,12 +62,28 @@ notebooks:
 project_distribution:
   paths: relative_to_repository_root
   results: paper_results
-  result_methods: [LPR-GNN, handcrafted_priority_rules, Wheatley]
+  result_methods: [LPR-GNN, classical_priority_rules, Wheatley]
   other_priority_rule_results: paper_results/other_priority_rules_results.csv
   inference_weights: paper_results/best.pt
   inference_weights_model: LPR-GNN_base
   result_provenance: paper_results/manifest.json
   third_party_data_rights: obtain_separately_and_follow_provider_terms
+
+article_comparison:
+  benchmark_instances: {J120: 600, RG30: 1800, RG300: 480, PACK: 55}
+  total_instances: 2935
+  classical_priority_rules: [SPT, LPT, MIS, MTS, LRPW, GRPW, LRW, GRW, EST, EFT, LST, LFT, ESTD, EFTD, LMSLK, GMSLK, LRWC, GRWC, LCRWC, GCRWC, LCRWCS, GCRWCS]
+  classical_rule_csv_ids: [spt, lpt, mis, mts, lrpw, grpw, lrw, grw, est, eft, lst, lft, dest, deft, mslk, mmslk, lrwc, grwc, lcrwc, gcrwc, lcrwcs, gcrwcs]
+  classical_rule_count: 22
+  compared_method_count: 24
+  development_families_excluded_from_benchmark_totals: [J30, J60, J90]
+  rg30_test_instances_in_full_benchmark: 180
+  csv_identifier_compatibility:
+    handcrafted: classical_priority_rules
+    wheatley: Wheatley
+  timing: original_measurement_boundaries_preserved_not_identical_across_methods
+  classical_mean_runtime: mean_over_article_instances_and_22_classical_rules
+  supplied_model_weights: shared_GRU_LPR_GNN_only
 
 resource_augmentation_update:
   date: "2026-10-19"
