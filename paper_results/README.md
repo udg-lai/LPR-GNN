@@ -64,8 +64,7 @@ The mean runtime for the classical rules averages these 22 rules, rather than
 summing the cost of running them all; the pooled mean weights instances equally.
 
 The source distribution supplies the shared-GRU *LPR-GNN* weights only.
-The article's other trained variants and its virtual best over ten
-trained models are not additional model checkpoints bundled in this archive.
+The article's other trained variants and its virtual best over eleven configurations are not additional model checkpoints bundled in this archive.
 
 ## Use the supplied weights
 
