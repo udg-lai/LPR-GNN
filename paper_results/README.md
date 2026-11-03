@@ -54,11 +54,17 @@ methods' times do not necessarily have identical timing boundaries.
 
 The article uses J120 (600), RG30 (1,800) and RG300 (480),
 for 2,880 instances. The 22 *classical priority rules* are:
-SPT, LPT, MIS, MTS, LRPW, GRPW, LRW, GRW, EST, EFT, LST, LFT, ESTD,
+SPT, LPT, MIS, MTS, LRPW, GRPW, LRW, GRW, EST, EFT, MAXLST, MAXLFT, ESTD,
 EFTD, LMSLK, GMSLK, LRWC, GRWC, LCRWC, GCRWC, LCRWCS and GCRWCS.
 Their CSV identifiers are `spt`, `lpt`, `mis`, `mts`, `lrpw`, `grpw`,
-`lrw`, `grw`, `est`, `eft`, `lst`, `lft`, `dest`, `deft`, `mslk`,
+`lrw`, `grw`, `est`, `eft`, `maxlst`, `maxlft`, `dest`, `deft`, `mslk`,
 `mmslk`, `lrwc`, `grwc`, `lcrwc`, `gcrwc`, `lcrwcs` and `gcrwcs`.
+MAXLST and MAXLFT maximize latest start and latest finish times.
+For a common reference horizon, their implemented ascending scores are the
+remaining longest-path length and that length minus the current activity duration.
+The archived dynamic counterparts use identifiers `dmaxlst` and `dmaxlft`.
+Only rule labels have changed; scores, ordering and numerical results are preserved.
+
 Other archived rules and repetitions are not part of this 22-rule selection.
 The mean runtime for the classical rules averages these 22 rules, rather than
 summing the cost of running them all; the pooled mean weights instances equally.

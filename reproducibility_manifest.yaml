@@ -72,8 +72,8 @@ project_distribution:
 article_comparison:
   benchmark_instances: {J120: 600, RG30: 1800, RG300: 480}
   total_instances: 2880
-  classical_priority_rules: [SPT, LPT, MIS, MTS, LRPW, GRPW, LRW, GRW, EST, EFT, LST, LFT, ESTD, EFTD, LMSLK, GMSLK, LRWC, GRWC, LCRWC, GCRWC, LCRWCS, GCRWCS]
-  classical_rule_csv_ids: [spt, lpt, mis, mts, lrpw, grpw, lrw, grw, est, eft, lst, lft, dest, deft, mslk, mmslk, lrwc, grwc, lcrwc, gcrwc, lcrwcs, gcrwcs]
+  classical_priority_rules: [SPT, LPT, MIS, MTS, LRPW, GRPW, LRW, GRW, EST, EFT, MAXLST, MAXLFT, ESTD, EFTD, LMSLK, GMSLK, LRWC, GRWC, LCRWC, GCRWC, LCRWCS, GCRWCS]
+  classical_rule_csv_ids: [spt, lpt, mis, mts, lrpw, grpw, lrw, grw, est, eft, maxlst, maxlft, dest, deft, mslk, mmslk, lrwc, grwc, lcrwc, gcrwc, lcrwcs, gcrwcs]
   classical_rule_count: 22
   compared_method_count: 24
   development_families_excluded_from_benchmark_totals: [J30, J60, J90]
