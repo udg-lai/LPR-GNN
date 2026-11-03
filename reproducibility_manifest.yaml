@@ -23,10 +23,9 @@ benchmark_preparation_command: python prepare_benchmarks.py
 dataset_guide: DATASETS.md
 datasets:
   bundled_raw_instances: false
-  supported_families: [j30, j60, j90, j120, PACK, RG30, RG300]
+  supported_families: [j30, j60, j90, j120, RG30, RG300]
   psplib: https://www.om-db.wi.tum.de/psplib/
   rg_library: https://github.com/MarioVanhoucke/RCPLIB-Resource-Constrained-Project-Library/releases/latest
-  pack_source_status: public_MiniZinc_mirror_with_pinned_commit
 architecture:
   type: shared_GRU
   iterations: 16
@@ -71,8 +70,8 @@ project_distribution:
   third_party_data_rights: obtain_separately_and_follow_provider_terms
 
 article_comparison:
-  benchmark_instances: {J120: 600, RG30: 1800, RG300: 480, PACK: 55}
-  total_instances: 2935
+  benchmark_instances: {J120: 600, RG30: 1800, RG300: 480}
+  total_instances: 2880
   classical_priority_rules: [SPT, LPT, MIS, MTS, LRPW, GRPW, LRW, GRW, EST, EFT, LST, LFT, ESTD, EFTD, LMSLK, GMSLK, LRWC, GRWC, LCRWC, GCRWC, LCRWCS, GCRWCS]
   classical_rule_csv_ids: [spt, lpt, mis, mts, lrpw, grpw, lrw, grw, est, eft, lst, lft, dest, deft, mslk, mmslk, lrwc, grwc, lcrwc, gcrwc, lcrwcs, gcrwcs]
   classical_rule_count: 22

@@ -21,7 +21,6 @@
     "J60",
     "J90",
     "J120",
-    "PACK",
     "RG30",
     "RG300"
   ],
@@ -31,7 +30,6 @@
       "J30": 480,
       "J60": 480,
       "J90": 480,
-      "PACK": 55,
       "RG300": 480,
       "RG30": 1800
     },
@@ -41,15 +39,14 @@
       "J120": 22200,
       "J30": 15360,
       "J60": 15360,
-      "J90": 15360,
-      "PACK": 2035
+      "J90": 15360
     }
   },
   "files": {
     "lpr_gnn_results.csv": {
       "source_filename": "makespan_results.xlsx",
       "source_sheet": "resultats",
-      "bytes": 222927
+      "bytes": 220243
     },
     "best.pt": {
       "source_filename": "best.pt",
@@ -83,11 +80,6 @@
           "records": 480
         },
         {
-          "family": "PACK",
-          "filename": "pac_results.jsonl",
-          "records": 55
-        },
-        {
           "family": "RG30",
           "filename": "rg30_results.jsonl",
           "records": 1800
@@ -107,20 +99,18 @@
           "J120": 21600,
           "J30": 14880,
           "J60": 14880,
-          "J90": 14880,
-          "PACK": 1980
+          "J90": 14880
         },
         "wheatley": {
           "J120": 600,
           "J30": 480,
           "J60": 480,
           "J90": 480,
-          "PACK": 55,
           "RG30": 1800,
           "RG300": 480
         }
       },
-      "bytes": 29761315
+      "bytes": 29368400
     }
   }
 }

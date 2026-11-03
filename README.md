@@ -94,7 +94,7 @@ copies from an earlier project are required. The source recipe is
 `instance_sources.json`; partition memberships are in `instance_splits.json`.
 
 For benchmark inference, `python prepare_benchmarks.py` separately prepares
-J30, J60, J90, J120, RG30, RG300 and PACK under `rcpsp/`, using
+J30, J60, J90, J120, RG30 and RG300 under `rcpsp/`, using
 `benchmark_sources.json`. This does not change the training partitions.
 
 Start Jupyter from the repository root and run these notebooks in order:
@@ -125,7 +125,7 @@ files are preserved unless regeneration is explicitly requested. The generation 
 ## Data and split
 
 The article compares *LPR-GNN*, 22 *classical priority rules* and *Wheatley*
-on 2,935 instances: J120 (600), RG30 (1,800), RG300 (480) and PACK (55).
+on 2,880 instances: J120 (600), RG30 (1,800) and RG300 (480).
 J30/J60/J90 are development families and are excluded from those benchmark
 totals. The 180 RG30 test instances are included in the full RG30 benchmark.
 The results archive preserves additional rules and repetitions; the exact

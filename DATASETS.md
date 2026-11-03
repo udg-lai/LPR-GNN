@@ -12,7 +12,6 @@ All paths below are relative to the cloned repository root.
 | J60 | [PSPLIB](https://www.om-db.wi.tum.de/psplib/), single-mode J60 | `rcpsp/j60/` |
 | J90 | [PSPLIB](https://www.om-db.wi.tum.de/psplib/), single-mode J90 | `rcpsp/j90/` |
 | J120 | [PSPLIB](https://www.om-db.wi.tum.de/psplib/), single-mode J120 | `rcpsp/j120/` |
-| PACK | Carlier and Neron's PACK suite; public [MiniZinc benchmark mirror](https://github.com/MiniZinc/minizinc-benchmarks/tree/master/rcpsp/data_pack) | `rcpsp/PACK/` |
 | RG30 | [RCPLIB releases](https://github.com/MarioVanhoucke/RCPLIB-Resource-Constrained-Project-Library/releases/latest), original RG30 | `rcpsp/RG30/` |
 | RG300 | [RCPLIB releases](https://github.com/MarioVanhoucke/RCPLIB-Resource-Constrained-Project-Library/releases/latest), original RG300 | `rcpsp/RG300/` |
 
@@ -23,18 +22,11 @@ the [OR&S dataset page](https://www.projectmanagement.ugent.be/research/project_
 provides background and points to RCPLIB. Extract archives first, then copy the
 instance files into the family directories above.
 
-PACK is obtained from the MiniZinc benchmark mirror, whose README attributes it
-to Carlier and Neron (2003), DOI `10.1016/S0377-2217(02)00763-4`. The source commit
-is recorded in `benchmark_sources.json`. The MiniZinc
-data contain real activities only: conversion adds a zero-duration, zero-demand
-dummy source and sink, preserving durations, demands and precedence constraints.
-It does not use local copies from an earlier project.
-
 ## Benchmark inference
 
 Run `python prepare_benchmarks.py` with the installed project environment to
-prepare all seven families: J30/J60/J90 (480 each), J120 (600), RG30 (1,800),
-RG300 (480) and PACK (55). It uses pinned public archives and PACK source files,
+prepare all six families: J30/J60/J90 (480 each), J120 (600), RG30 (1,800),
+RG300 (480). It uses pinned public archives and
 writes parser-compatible inputs under `rcpsp/`.
 Its archive cache defaults to `outputs/input_archives/`; `--cache-dir` can point
 to an existing cache. Preparation writes the selected inputs to their destination paths, replacing existing files.

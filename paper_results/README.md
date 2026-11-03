@@ -17,20 +17,19 @@ The supplied inference weights belong only to the 16-iteration shared-GRU
 - `manifest.json`: source filenames, record counts and
   checkpoint-selection metadata for *LPR-GNN* and *Wheatley*.
 
-The combined CSV contains 147,850 classical priority-rule runs and 4,375 *Wheatley*
+The combined CSV contains 145,870 classical priority-rule runs and 4,320 *Wheatley*
 rollouts. Select `rule=wheatley` to extract *Wheatley* results. Its
 `method_type=neural_RL` distinguishes it from `method_type=handcrafted`.
 The latter is a retained CSV identifier for *classical priority rules*;
 the descriptive terminology follows the article.
 
-CSV headers are in English. `family` identifies each benchmark family; `PACK`
-corresponds to input filenames beginning with `pac`. Included families are J30,
-J60, J90, J120, PACK, RG30 and RG300. Absolute input paths and long schedule/selection sequences are not
+CSV headers are in English. `family` identifies each benchmark family. Included families are J30,
+J60, J90, J120, RG30 and RG300. Absolute input paths and long schedule/selection sequences are not
 included. The source workbooks are left unchanged.
 
 The result files also contain J30/J60/J90 records. Do not treat these as unseen
 benchmarks: these families include instances used for training and validation.
-The article's schedule-level benchmark families are J120, PACK, RG30 and RG300.
+The article's schedule-level benchmark families are J120, RG30 and RG300.
 Blank gap fields mean no reference was available. A negative reference value is
 the original missing-reference sentinel, not an optimal makespan.
 
@@ -53,8 +52,8 @@ methods' times do not necessarily have identical timing boundaries.
 
 ## Article comparison
 
-The article uses J120 (600), RG30 (1,800), RG300 (480) and PACK (55),
-for 2,935 instances. The 22 *classical priority rules* are:
+The article uses J120 (600), RG30 (1,800) and RG300 (480),
+for 2,880 instances. The 22 *classical priority rules* are:
 SPT, LPT, MIS, MTS, LRPW, GRPW, LRW, GRW, EST, EFT, LST, LFT, ESTD,
 EFTD, LMSLK, GMSLK, LRWC, GRWC, LCRWC, GCRWC, LCRWCS and GCRWCS.
 Their CSV identifiers are `spt`, `lpt`, `mis`, `mts`, `lrpw`, `grpw`,

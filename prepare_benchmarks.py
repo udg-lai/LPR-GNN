@@ -1,41 +1,11 @@
-"""Download and prepare the seven public benchmark families (no split changes)."""
+"""Download and prepare the six public benchmark families (no split changes)."""
 from __future__ import annotations
 
 import argparse
 import json
 from pathlib import Path, PurePosixPath
-import re
-import urllib.request
 
 from prepare_instances import ROOT, canonical_rcp, read_archives
-
-
-def pack_to_rcp(blob):
-    """Convert MiniZinc PACK data, adding only zero-duration source/sink nodes."""
-    text = re.sub(r'%[^\n]*', '', blob.decode('utf-8'))
-
-    def field(name):
-        match = re.search(r'\b' + name + r'\s*=\s*(.*?);', text, flags=re.S)
-        if not match:
-            raise ValueError(f'Missing PACK field: {name}')
-        return match.group(1)
-
-    def integers(value):
-        return [int(x) for x in re.findall(r'-?\d+', value)]
-
-    resources, activities = int(field('n_res')), int(field('n_tasks'))
-    capacities, durations = integers(field('rc')), integers(field('d'))
-    demands = [integers(row) for row in field('rr').strip(' []').strip('|').split('|')]
-    successors = [integers(row) for row in re.findall(r'\{([^}]*)\}', field('suc'))]
-    # MiniZinc contains real activities only; the SSGS expects dummy endpoints.
-    incoming = {s for row in successors for s in row}
-    sources = [a + 1 for a in range(1, activities + 1) if a not in incoming]
-    rows = [[activities + 2, resources], capacities, [0] * (resources + 1) + [len(sources)] + sources]
-    for a in range(activities):
-        target_ids = [s + 1 for s in successors[a]] or [activities + 2]
-        rows.append([durations[a]] + [demands[r][a] for r in range(resources)] + [len(target_ids)] + target_ids)
-    rows.append([0] * (resources + 2))
-    return canonical_rcp(('\n'.join(' '.join(map(str, row)) for row in rows)).encode())
 
 
 def prepare(cache):
@@ -64,18 +34,6 @@ def prepare(cache):
                 if member.isfile() and member.name.startswith('original/' + family + '_'):
                     place(family, PurePosixPath(member.name).name, canonical_rcp(archive.extractfile(member).read()))
             print(f'{family}: {len(records[family])}', flush=True)
-        for source in recipe['pack']['files']:
-            path = cache / 'PACK' / source['name']
-            if not path.exists():
-                request = urllib.request.Request(source['url'], headers={'User-Agent': 'LPR-GNN-benchmark-preparation'})
-                with urllib.request.urlopen(request, timeout=120) as response:
-                    blob = response.read()
-                path.parent.mkdir(parents=True, exist_ok=True)
-                path.write_bytes(blob)
-            blob = path.read_bytes()
-            converted = pack_to_rcp(blob)
-            place('PACK', Path(source['name']).stem + '.rcp', converted)
-        print(f'PACK: {len(records["PACK"])}', flush=True)
         report = ROOT / 'outputs/benchmark_inputs.json'
         report.parent.mkdir(parents=True, exist_ok=True)
         report.write_text(json.dumps(records, indent=2) + '\n', encoding='utf-8')

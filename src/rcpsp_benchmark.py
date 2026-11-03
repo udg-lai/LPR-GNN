@@ -36,13 +36,6 @@ def _instance_keys(problem_size: int, group: int, instance: int) -> list[str]:
     ]
 
 
-# Build equivalent PACK bound-lookup keys.
-# Parameters: number: PACK instance ID
-# Returns: list[str].
-def _pack_keys(number: int) -> list[str]:
-    return [f"pack{number:03d}", f"pack{number}"]
-
-
 # Read reference bounds into a filename-keyed mapping.
 # Parameters: path: input/output path; problem_size: PSPLIB activity count
 # Returns: Dict[str, int].
@@ -69,10 +62,6 @@ def load_bounds_file(path: str | Path, problem_size: int | None = None) -> Dict[
                 if last_value is not None:
                     key = normalize_instance_name(instance_name)
                     bounds[key] = last_value
-                    match = re.fullmatch(r"pack0*(\d+)", key)
-                    if match:
-                        for alias in _pack_keys(int(match.group(1))):
-                            bounds[alias] = last_value
                     continue
 
             parts = (
@@ -93,8 +82,6 @@ def load_bounds_file(path: str | Path, problem_size: int | None = None) -> Dict[
             if problem_size is not None:
                 for key in _instance_keys(problem_size, group, instance):
                     bounds[key] = makespan
-            for key in _pack_keys(instance):
-                bounds[key] = makespan
 
     return bounds
 
@@ -106,9 +93,4 @@ def get_bound(filename: str | Path, bounds: Dict[str, int], default: int = -1) -
     key = normalize_instance_name(filename)
     if key in bounds:
         return bounds[key]
-    match = re.fullmatch(r"pack0*(\d+)", key)
-    if match:
-        for alias in _pack_keys(int(match.group(1))):
-            if alias in bounds:
-                return bounds[alias]
     return default
