@@ -126,6 +126,8 @@ Inference and validation use direct graph construction and reuse invariant GNN
 computations within each forward pass. The default rollout batch size is 64.
 For the archived timing protocol, use 6. Floating-point ties can produce different
 schedules across batch sizes or CPU/GPU devices; the archived results are unchanged.
+Training reuses fixed graph metadata within each forward pass while retaining
+the original learned computations and gradient accumulation order.
 
 ## Data and split
 

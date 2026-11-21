@@ -634,8 +634,11 @@ class RcpspGNN(nn.Module):
     # Parameters: data: heterogeneous graph batch
     # Returns: Border activity logits.
     def forward(self, data: HeteroData) -> Tensor:
-        # Only rollout evaluation: training and gradient-enabled evaluation keep
-        # the reference path. No encoded features survive across forward calls.
+        # Training caches only fixed metadata; learned computations retain
+        # their original order. All caches are local to this forward call.
+        if self.training:
+            from .training_gnn import forward_training
+            return forward_training(self, data)
         if not self.training and not torch.is_grad_enabled():
             from .rollout_gnn import forward_rollout
             return forward_rollout(self, data)
