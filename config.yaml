@@ -116,7 +116,7 @@ training:
 # Batched original-instance rollout settings shared by validation/test and the directory predictor, except save_every which is predictor-only.
 inference:
   # Maximum independent RCPSP instances advanced together, sharing one model forward pass per decision step. Used by src/instance_evaluation.py: evaluate_instances() and makespan_predictor.ipynb.
-  rollout_batch_size: 6
+  rollout_batch_size: 64
   # CPU thread count for rollout graph preparation; not DataLoader processes or GPU model replicas. Used by src/rcpsp_schedule.py: calculate_makespans_batched(), via evaluate_instances() and makespan_predictor.ipynb.
   graph_workers: 12
   # Save the predictor Excel after this many new result rows; 0 disables intermediate saves (final save still occurs). Used only by makespan_predictor.ipynb, not training validation/test.

@@ -632,6 +632,13 @@ def predict_border_node(
 
     data = parse_rcpsp_graph(graph)
     node_ids = border_metadata(data)[0]
+    return _predict_border_data(model, data, node_ids, device)
+
+
+def _predict_border_data(model, data, node_ids, device):
+    """Score a prepared single graph with the original ranking/tie semantics."""
+    import torch
+
     device = torch.device(device)
     data = data.to(device)
     model.eval()
@@ -681,6 +688,7 @@ class _BatchedScheduleState:
     decisions: List[dict]
     real_activity_count: int
     step: int = 0
+    graph_builder: object = None
 
 
 # Initialize one state for batched schedule construction.
@@ -721,6 +729,24 @@ def _prepare_batched_border_graph(
     state: _BatchedScheduleState,
     graph_transform: GraphTransform | None,
 ) -> tuple[object, list[object]]:
+    from .rollout_graph import RolloutGraphBuilder, supports_transform
+
+    if supports_transform(graph_transform):
+        builder = state.graph_builder
+        signature = (None if graph_transform is None else
+                     (graph_transform.temporal_reference, graph_transform.resource_clip))
+        if (builder is None or builder.transform is not graph_transform or
+                (None if builder.transform is None else (builder.reference, builder.clip)) != signature):
+            builder = state.graph_builder = RolloutGraphBuilder(state, graph_transform)
+        return builder.build(state)
+    return _prepare_batched_border_graph_reference(state, graph_transform)
+
+
+def _prepare_batched_border_graph_reference(
+    state: _BatchedScheduleState,
+    graph_transform: GraphTransform | None,
+) -> tuple[object, list[object]]:
+    """Original exporter/normalizer/parser path, also used for custom transforms."""
     from .data import border_metadata, parse_rcpsp_graph
 
     all_nodes = sorted(state.border | state.others)
@@ -1069,8 +1095,22 @@ def calculate_makespan(
     graph_transform: GraphTransform | None = None,
 ) -> ScheduleResult:
     import torch
+    from .rollout_graph import supports_transform
 
     device = torch.device(device)
+
+    if supports_transform(graph_transform):
+        state = _initialize_batched_schedule_state(instance, max_time)
+        while state.step < state.real_activity_count:
+            if len(state.border) == 1:
+                prediction = forced_border_prediction(next(iter(state.border)))
+            else:
+                data, ids = _prepare_batched_border_graph(state, graph_transform)
+                prediction = _predict_border_data(model, data, ids, device)
+            _apply_batched_prediction(state, prediction)
+            if state.decisions[-1]['selection_method'] == 'gnn':
+                state.decisions[-1]['selection_method'] = 'selector'
+        return _finalize_batched_schedule_state(state)
 
     # Normalize a decision graph and choose its top-scoring activity.
     # Parameters: graph: node-link graph; border: eligible activity IDs; step: construction step

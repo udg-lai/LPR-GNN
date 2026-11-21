@@ -634,6 +634,15 @@ class RcpspGNN(nn.Module):
     # Parameters: data: heterogeneous graph batch
     # Returns: Border activity logits.
     def forward(self, data: HeteroData) -> Tensor:
+        # Only rollout evaluation: training and gradient-enabled evaluation keep
+        # the reference path. No encoded features survive across forward calls.
+        if not self.training and not torch.is_grad_enabled():
+            from .rollout_gnn import forward_rollout
+            return forward_rollout(self, data)
+        return self.forward_reference(data)
+
+    def forward_reference(self, data: HeteroData) -> Tensor:
+        """Original forward, retained for training and exact regression checks."""
         states: Dict[str, Tensor] = {
             "border": self._build_state("border", data["border"].x),
             "other": self._build_state("other", data["other"].x),

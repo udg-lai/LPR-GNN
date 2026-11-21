@@ -115,12 +115,17 @@ compatible reference file and set its relative path in `BOUNDS_PATH`.
 Configure training in `config.yaml`. Defaults preserve the base model, 12 data workers,
 24 epochs, all available training graphs per epoch, and no checkpoint resume.
 Adjust worker count or batch size for smaller machines. Training order is shuffled;
-validation/test use deterministic inference over raw RCPSP instances, not augmented
+validation/test use greedy inference over raw RCPSP instances, not augmented
 validation/test graphs. Training augmentation includes resource permutation and duration scaling.
 Each decision graph produces three variants: original, resource-permuted and
 duration-scaled (the two augmentations are not combined). Training uses all
 401,778 archived graphs, matching the reported base checkpoint. Existing graph
 files are preserved unless regeneration is explicitly requested. The generation seed follows the YAML seed.
+
+Inference and validation use direct graph construction and reuse invariant GNN
+computations within each forward pass. The default rollout batch size is 64.
+For the archived timing protocol, use 6. Floating-point ties can produce different
+schedules across batch sizes or CPU/GPU devices; the archived results are unchanged.
 
 ## Data and split
 
