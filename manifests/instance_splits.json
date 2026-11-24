@@ -4234,5 +4234,5 @@
       }
     ]
   },
-  "input_preparation": "instance_sources.json; prepare_instances.py; canonical Patterson integer rows with single spaces and LF"
+  "input_preparation": "manifests/instance_sources.json; src/prepare_instances.py; canonical Patterson integer rows with single spaces and LF"
 }

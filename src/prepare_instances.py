@@ -12,7 +12,7 @@ import zipfile
 
 from src.rcpsp_instance import parse_mrcpsp
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def canonical_rcp(blob):
@@ -94,8 +94,8 @@ def source_bytes(archives, entry):
 
 
 def prepare(cache):
-    recipe = json.loads((ROOT / 'instance_sources.json').read_text(encoding='utf-8'))
-    manifest = json.loads((ROOT / 'instance_splits.json').read_text(encoding='utf-8'))
+    recipe = json.loads((ROOT / 'manifests/instance_sources.json').read_text(encoding='utf-8'))
+    manifest = json.loads((ROOT / 'manifests/instance_splits.json').read_text(encoding='utf-8'))
     entries = [entry for split in ('train', 'validation', 'test') for entry in manifest['splits'][split]]
     archives = read_archives(recipe, cache)
     prepared = {}

@@ -5,11 +5,11 @@ import argparse
 import json
 from pathlib import Path, PurePosixPath
 
-from prepare_instances import ROOT, canonical_rcp, read_archives
+from .prepare_instances import ROOT, canonical_rcp, read_archives
 
 
 def prepare(cache):
-    recipe = json.loads((ROOT / 'benchmark_sources.json').read_text(encoding='utf-8'))
+    recipe = json.loads((ROOT / 'manifests/benchmark_sources.json').read_text(encoding='utf-8'))
     archives = read_archives(recipe, cache)
     records = {}
 

@@ -82,4 +82,4 @@ CHECKPOINT_PATH = PROJECT_ROOT / "paper_results" / "best.pt"
 
 Keep the base architecture in `config.yaml`. The supplied state dictionary is
 accepted by `load_model_state`. It is for inference, not resuming optimizer state.
-Obtain raw instances separately as described in `../DATASETS.md`.
+Obtain raw instances separately as described in `../docs/DATASETS.md`.

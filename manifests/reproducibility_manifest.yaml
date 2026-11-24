@@ -14,13 +14,13 @@ environment:
   dependency_scope: pinned_direct_dependencies_not_a_transitive_lockfile
   torch: 2.5.1+cu121
 configuration_file: config.yaml
-split_manifest: instance_splits.json
-input_source_recipe: instance_sources.json
-input_preparation_command: python prepare_instances.py
+split_manifest: manifests/instance_splits.json
+input_source_recipe: manifests/instance_sources.json
+input_preparation_command: python -m src.prepare_instances
 input_conversion: deterministic_public_PSPLIB_and_original_RCPLIB_v2_4
-benchmark_source_recipe: benchmark_sources.json
-benchmark_preparation_command: python prepare_benchmarks.py
-dataset_guide: DATASETS.md
+benchmark_source_recipe: manifests/benchmark_sources.json
+benchmark_preparation_command: python -m src.prepare_benchmarks
+dataset_guide: docs/DATASETS.md
 datasets:
   bundled_raw_instances: false
   supported_families: [j30, j60, j90, j120, RG30, RG300]

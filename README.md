@@ -81,21 +81,21 @@ Such a build is a platform adaptation, not the exact reference environment.
 
 ## Minimal workflow
 
-First download and prepare the raw instances following [DATASETS.md](DATASETS.md).
+First download and prepare the raw instances following [docs/DATASETS.md](docs/DATASETS.md).
 That guide lists the external sources, the required directories, and the frozen
 split's format and filename conventions. Cloning alone does not supply
 the instances required for graph generation, validation or test.
 
-From the repository root, run `python prepare_instances.py` with the installed
+From the repository root, run `python -m src.prepare_instances` with the installed
 project environment. It downloads public PSPLIB and RCPLIB v2.4
 archives, converts the required Patterson inputs deterministically,
 and places the three fixed partitions. No local
 copies from an earlier project are required. The source recipe is
-`instance_sources.json`; partition memberships are in `instance_splits.json`.
+`manifests/instance_sources.json`; partition memberships are in `manifests/instance_splits.json`.
 
-For benchmark inference, `python prepare_benchmarks.py` separately prepares
+For benchmark inference, `python -m src.prepare_benchmarks` separately prepares
 J30, J60, J90, J120, RG30 and RG300 under `rcpsp/`, using
-`benchmark_sources.json`. This does not change the training partitions.
+`manifests/benchmark_sources.json`. This does not change the training partitions.
 
 Start Jupyter from the repository root and run these notebooks in order:
 
@@ -143,17 +143,17 @@ The results archive preserves additional rules and repetitions; the exact
   training instances here. The bundled `source_data/training_sources.csv` contains
   reference schedules needed as supervision; it does not contain raw instances.
 - `data/validation/`, `data/test/`: place the original held-out instances here,
-  directly in each directory, as specified in `instance_splits.json`.
+  directly in each directory, as specified in `manifests/instance_splits.json`.
 - Keep each manifest entry's format: training/validation include both `.RCP`
   and `.sm` files; test uses `.rcp`. Do not change extensions to match a family name.
-- `instance_splits.json`: fixed memberships of reproducibly
+- `manifests/instance_splits.json`: fixed memberships of reproducibly
   prepared public inputs (1,106 train, 122 validation, 180 test instances).
-  Do not resplit individual graphs. `instance_sources.json` pins archives, source
-  members and conversions; `prepare_instances.py` prepares these inputs.
+  Do not resplit individual graphs. `manifests/instance_sources.json` pins archives, source
+  members and conversions; `src/prepare_instances.py` prepares these inputs.
 - `data/train/`: initially empty; populated by graph generation.
 - `outputs/`: created only when running the code; excluded from Git.
 
-See [DATASETS.md](DATASETS.md) for download sources and placement instructions.
+See [docs/DATASETS.md](docs/DATASETS.md) for download sources and placement instructions.
 The project distribution excludes raw instances, generated graphs, saved notebook
 outputs, credentials, machine-specific configuration and runtime outputs outside
 the explicitly included `paper_results/` archive.
@@ -170,7 +170,7 @@ values supplied under both spellings raise an error. The training CSV uses
 ## Project distribution and data rights
 
 Benchmark instances must be obtained separately from their external providers,
-following the sources listed in [DATASETS.md](DATASETS.md) and their applicable
+following the sources listed in [docs/DATASETS.md](docs/DATASETS.md) and their applicable
 terms. No third-party instance files are redistributed in the current source tree.
 The MIT License covers the original
 project software and its documentation; it does not grant a new license to

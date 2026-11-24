@@ -12,7 +12,7 @@ output_dir: ./outputs/run
 # Original RCPSP instance partitions for deterministic validation and final test rollouts.
 instance_evaluation:
   # JSON split manifest with instance paths and integrity information. Used by src/instance_evaluation.py: load_instance_splits(), training.ipynb and create_graphs_training.ipynb.
-  manifest: ./instance_splits.json
+  manifest: ./manifests/instance_splits.json
   # Descriptive metadata only: minimum mean validation makespan selects best.pt. src/trainer.py: train() implements this criterion directly; changing this field does not switch the metric.
   criterion: validation_mean_makespan
 # Graph feature normalization; only the explicitly identified settings below are configurable in the current implementation.

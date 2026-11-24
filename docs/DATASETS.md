@@ -24,7 +24,7 @@ instance files into the family directories above.
 
 ## Benchmark inference
 
-Run `python prepare_benchmarks.py` with the installed project environment to
+Run `python -m src.prepare_benchmarks` with the installed project environment to
 prepare all six families: J30/J60/J90 (480 each), J120 (600), RG30 (1,800),
 RG300 (480). It uses pinned public archives and
 writes parser-compatible inputs under `rcpsp/`.
@@ -47,7 +47,7 @@ Reference bounds are optional; configure `BOUNDS_PATH` in the predictor to obtai
 ## Training, validation and test
 
 Benchmark storage alone does not prepare the training split. The frozen
-`instance_splits.json` specifies paths for:
+`manifests/instance_splits.json` specifies paths for:
 
 | Purpose | Required location | Number of instances |
 | --- | --- | ---: |
@@ -57,15 +57,15 @@ Benchmark storage alone does not prepare the training split. The frozen
 | Validation J30/J60/J90 | `data/validation/<manifest filename>` | 122 |
 | Test RG30 | `data/test/<manifest filename>.rcp` | 180 |
 
-1. Run `python prepare_instances.py` using the project environment. It downloads
+1. Run `python -m src.prepare_instances` using the project environment. It downloads
    public archives and places instances at the manifest paths, replacing existing files.
-2. `instance_sources.json` records each upstream archive, member and conversion.
+2. `manifests/instance_sources.json` records each upstream archive, member and conversion.
    Archives are cached under `outputs/input_archives/`; use `--cache-dir` to reuse
    an existing archive directory.
 3. Native `.sm` members retain their bytes. Required `.RCP` files are converted
    from PSPLIB. Patterson output uses integer tokens, single spaces, LF and a final
    newline. Wrapped successor lists are read using their declared counts.
-4. `instance_splits.json` supplies training, validation and test memberships.
+4. `manifests/instance_splits.json` supplies training, validation and test memberships.
    Inputs and reference schedules are read when used, without a separate validation pass.
 5. Run `create_graphs_training.ipynb` to populate `data/train/`, then run
    `training.ipynb`. Validation and test use rollouts on raw instances. Finally run
